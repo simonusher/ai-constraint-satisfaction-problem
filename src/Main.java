@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args) {
         Problem problem = new FutoshikiProblem();
-        problem.load("test_futo_8_2.txt");
+        problem.load("test_futo_7_0.txt");
         if(problem.isLoaded()){
             ForwardCheckingSolver solver = new ForwardCheckingSolver(problem);
 //            BacktrackingSolver solver = new BacktrackingSolver(problem);

@@ -134,11 +134,13 @@ public class Variable {
     }
 
     public boolean removeValueFromDomain(Integer value){
+        pushHistoryStack();
         availableDomain.remove(value);
         return !availableDomain.isEmpty();
     }
 
     public boolean removeValuesFromDomain(List<Integer> incorrectValues){
+        pushHistoryStack();
         availableDomain.removeAll(incorrectValues);
         return !availableDomain.isEmpty();
     }
@@ -163,4 +165,5 @@ public class Variable {
     public HistoryPair getHistorySize(){
         return new HistoryPair(this, domainHistory.size());
     }
+
 }
