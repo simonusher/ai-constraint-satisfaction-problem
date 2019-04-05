@@ -11,7 +11,6 @@ public class Variable {
     private Set<Constraint> myConstraints;
     private Integer value;
 
-    private Stack<List<Integer>> availableDomainHistory;
 
     public Variable(List<Integer> wholeDomain) {
         this.wholeDomain = wholeDomain;
@@ -19,7 +18,6 @@ public class Variable {
         this.isFixed = false;
         this.isSet = false;
         this.resetDomain();
-        this.availableDomainHistory = new Stack<>();
     }
 
     public Variable(List<Integer> wholeDomain, Integer initialValue) {
@@ -28,7 +26,6 @@ public class Variable {
         this.isFixed = true;
         this.resetDomain();
         setValue(initialValue);
-        this.availableDomainHistory = new Stack<>();
     }
 
     public boolean isSet() {
@@ -67,14 +64,13 @@ public class Variable {
         this.availableDomain.addAll(this.wholeDomain);
     }
 
-    public void reset() {
-        resetDomain();
+    public void resetValue(){
         this.value = null;
         this.isSet = false;
     }
 
-    public void resetAndRestoreDomain(int domainStateNumber){
-        restoreDomainToState(domainStateNumber);
+    public void reset() {
+        resetDomain();
         this.value = null;
         this.isSet = false;
     }
@@ -105,47 +101,21 @@ public class Variable {
                 .filter(variable -> variable != this && !variable.isSet());
     }
 
-    public boolean hasSmallerThanConstraint(){
-        return this.myConstraints.stream().anyMatch(c -> c instanceof SmallerThanConstraint);
-    }
-
     public int getNumberOfConstraints() {
         return myConstraints.size();
     }
 
-    public boolean clearConstrainedVariablesDomains() {
-        return myConstraints.stream().allMatch(constraint -> constraint.removeIncorrectVariableValues(this));
-    }
-
-    public boolean removeValuesFromDomain(List<Integer> values){
-        List<Integer> lastDomainState = new LinkedList<>(this.availableDomain);
-        this.availableDomainHistory.push(lastDomainState);
-        this.availableDomain.removeAll(values);
-        return !this.availableDomain.isEmpty();
-    }
-
-    public boolean removeValueFromDomain(Integer value){
-        pushDomainHistoryState();
-        this.availableDomain.remove(value);
-        return !this.availableDomain.isEmpty();
-    }
-
-    public void pushDomainHistoryState(){
-        List<Integer> lastDomainState = new LinkedList<>(this.availableDomain);
-        this.availableDomainHistory.push(lastDomainState);
-    }
-
-    public void popDomainHistoryState(){
-        this.availableDomain = availableDomainHistory.pop();
-    }
-
-    public Integer getDomainHistorySize(){
-        return availableDomainHistory.size();
-    }
-
-    public void restoreDomainToState(Integer numberOfState){
-        while(this.availableDomainHistory.size() != numberOfState){
-            this.popDomainHistoryState();
+    public boolean recalculateAvailableDomain(){
+        resetDomain();
+        List<Integer> available = new LinkedList<>();
+        for(int i = 0; i < availableDomain.size(); i++){
+            setValue(availableDomain.get(i));
+            if(correctlyAssigned()){
+                available.add(this.value);
+            }
         }
+        this.resetValue();
+        this.availableDomain = available;
+        return !this.availableDomain.isEmpty();
     }
 }

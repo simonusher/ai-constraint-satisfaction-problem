@@ -1,7 +1,6 @@
 import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 public class ForwardCheckingSolver {
     private Problem problem;
@@ -9,7 +8,7 @@ public class ForwardCheckingSolver {
     private List<Variable> variables;
 
     private Stack<Variable> variablesToCheck;
-    private int numberOfReturns;
+    private int numberOfCalls;
 
     public ForwardCheckingSolver(Problem problem) {
         this.problem = problem;
@@ -20,7 +19,7 @@ public class ForwardCheckingSolver {
     public void solve() {
         sortVariables();
         resetVariablesToCheck();
-        this.numberOfReturns = 0;
+        this.numberOfCalls = 0;
         checkNextVariable();
     }
 
@@ -34,46 +33,31 @@ public class ForwardCheckingSolver {
     }
 
     private void checkNextVariable(){
+        numberOfCalls++;
         if(variablesToCheck.empty()){
             System.out.println("Found solution");
             problem.saveCurrentSolution();
         } else {
             Variable currentVariable = variablesToCheck.pop();
-            int currentVariableHistorySize = currentVariable.getDomainHistorySize();
-            currentVariable.pushDomainHistoryState();
 
-            boolean solutionExists = false;
             List<Variable> constrainedVariables = currentVariable.getVariablesToChange();
-            List<Integer> outerHistorySizes = constrainedVariables.stream()
-                    .map(Variable::getDomainHistorySize).collect(Collectors.toList());
 
             while(currentVariable.nextValue()){
                 boolean correctlyAssigned = currentVariable.correctlyAssigned();
                 if(correctlyAssigned) {
-                    List<Integer> historySizes = currentVariable.getVariablesToChange().stream()
-                            .map(Variable::getDomainHistorySize).collect(Collectors.toList());
-                    if(currentVariable.clearConstrainedVariablesDomains()){
-                        solutionExists = true;
+                    boolean domainsNotEmpty = constrainedVariables.stream().allMatch(Variable::recalculateAvailableDomain);
+                    if(domainsNotEmpty){
                         checkNextVariable();
-                    } else {
-                        for(int i = 0; i < constrainedVariables.size(); i++){
-                            constrainedVariables.get(i).restoreDomainToState(historySizes.get(i));
-                        }
                     }
                 }
             }
-            if(!solutionExists){
-                numberOfReturns++;
-            }
-            for(int i = 0; i < constrainedVariables.size(); i++){
-                constrainedVariables.get(i).restoreDomainToState(outerHistorySizes.get(i));
-            }
-            currentVariable.resetAndRestoreDomain(currentVariableHistorySize);
+            currentVariable.reset();
+            constrainedVariables.stream().forEach(variable -> variable.reset());
             variablesToCheck.push(currentVariable);
         }
     }
 
-    public int getNumberOfReturns() {
-        return numberOfReturns;
+    public int getNumberOfCalls() {
+        return numberOfCalls;
     }
 }

@@ -4,5 +4,5 @@ public interface Constraint {
     List<Variable> getVariables();
     boolean isSatisfied();
 
-    boolean removeIncorrectVariableValues(Variable changedVariable);
+//    boolean removeIncorrectVariableValues(Variable changedVariable);
 }

@@ -33,10 +33,10 @@ public class UnequalityConstraint implements Constraint {
         return satisfied;
     }
 
-    @Override
-    public boolean removeIncorrectVariableValues(Variable changedVariable) {
-        return myVariables.stream()
-                .filter(variable -> variable != changedVariable && !variable.isSet())
-                .allMatch(variable -> variable.removeValueFromDomain(changedVariable.getValue()));
-    }
+//    @Override
+//    public boolean removeIncorrectVariableValues(Variable changedVariable) {
+//        return myVariables.stream()
+//                .filter(variable -> variable != changedVariable && !variable.isSet())
+//                .allMatch(variable -> variable.removeValueFromDomain(changedVariable.getValue()));
+//    }
 }

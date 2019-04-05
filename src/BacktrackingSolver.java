@@ -8,7 +8,7 @@ public class BacktrackingSolver {
     private List<Variable> variables;
 
     private Stack<Variable> variablesToCheck;
-    private int numberOfReturns;
+    private int numberOfCalls;
 
     public BacktrackingSolver(Problem problem) {
         this.problem = problem;
@@ -19,7 +19,7 @@ public class BacktrackingSolver {
     public void solve() {
         sortVariables();
         resetVariablesToCheck();
-        this.numberOfReturns = 0;
+        this.numberOfCalls = 0;
         checkNextVariable();
     }
 
@@ -33,29 +33,25 @@ public class BacktrackingSolver {
     }
 
     private void checkNextVariable(){
+        numberOfCalls++;
         if(variablesToCheck.empty()){
             System.out.println("Found solution");
             problem.saveCurrentSolution();
         } else {
             Variable currentVariable = variablesToCheck.pop();
 
-            boolean solutionExists = false;
             while(currentVariable.nextValue()){
                 boolean correctlyAssigned = currentVariable.correctlyAssigned();
                 if(correctlyAssigned) {
-                    solutionExists = true;
                     checkNextVariable();
                 }
-            }
-            if(!solutionExists){
-                numberOfReturns++;
             }
             currentVariable.reset();
             variablesToCheck.push(currentVariable);
         }
     }
 
-    public int getNumberOfReturns() {
-        return numberOfReturns;
+    public int getNumberOfCalls() {
+        return numberOfCalls;
     }
 }
