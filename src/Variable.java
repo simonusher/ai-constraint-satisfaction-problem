@@ -79,6 +79,11 @@ public class Variable {
         return this.isSet && other.isSet && this.value.equals(other.value);
     }
 
+    public boolean equals(Variable other){
+        return this.value.equals(other.value);
+    }
+
+
     public boolean isGreaterThan(Variable other){
         return !this.isSet || !other.isSet || this.value > other.value;
     }
@@ -92,12 +97,13 @@ public class Variable {
     }
 
     public List<Variable> getVariablesToChange(){
-        return new ArrayList<>(getVariablesToChangeStream().collect(Collectors.toSet()));
+        return getVariablesToChangeStream().collect(Collectors.toList());
     }
 
     public Stream<Variable> getVariablesToChangeStream(){
         return myConstraints.stream()
                 .flatMap(constraint -> constraint.getVariables().stream())
+                .distinct()
                 .filter(variable -> variable != this && !variable.isSet());
     }
 
@@ -117,5 +123,9 @@ public class Variable {
         this.resetValue();
         this.availableDomain = available;
         return !this.availableDomain.isEmpty();
+    }
+
+    public int getAvailableDomainSize() {
+        return this.availableDomain.size();
     }
 }

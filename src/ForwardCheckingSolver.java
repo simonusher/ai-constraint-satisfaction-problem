@@ -9,6 +9,7 @@ public class ForwardCheckingSolver {
 
     private Stack<Variable> variablesToCheck;
     private int numberOfCalls;
+    private MrvComparator mrvComparator = new MrvComparator();
 
     public ForwardCheckingSolver(Problem problem) {
         this.problem = problem;
@@ -24,7 +25,8 @@ public class ForwardCheckingSolver {
     }
 
     private void sortVariables() {
-        this.variables.sort(Comparator.comparingInt(Variable::getNumberOfConstraints));
+//        this.variables.sort(Comparator.comparingInt(Variable::getNumberOfConstraints));
+        this.variables.sort(mrvComparator);
     }
 
     private void resetVariablesToCheck() {
@@ -47,17 +49,25 @@ public class ForwardCheckingSolver {
                 if(correctlyAssigned) {
                     boolean domainsNotEmpty = constrainedVariables.stream().allMatch(Variable::recalculateAvailableDomain);
                     if(domainsNotEmpty){
+                        selectNextVariable();
                         checkNextVariable();
                     }
                 }
             }
             currentVariable.reset();
-            constrainedVariables.stream().forEach(variable -> variable.reset());
+            constrainedVariables.forEach(variable -> variable.reset());
             variablesToCheck.push(currentVariable);
         }
     }
 
     public int getNumberOfCalls() {
         return numberOfCalls;
+    }
+
+    private void selectNextVariable(){
+        variablesToCheck.stream().max(mrvComparator).ifPresent(variable -> {
+            variablesToCheck.remove(variable);
+            variablesToCheck.push(variable);
+        });
     }
 }
