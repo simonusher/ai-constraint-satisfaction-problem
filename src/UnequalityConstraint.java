@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -6,15 +5,12 @@ public class UnequalityConstraint implements Constraint {
     private List<Variable> myVariables;
     private int numberOfVariables;
     private int variablesMinusOne;
-    private HashSet<Integer> unique;
-
 
 
     public UnequalityConstraint(List<Variable> myVariables) {
         this.myVariables = myVariables;
         this.numberOfVariables = myVariables.size();
         this.variablesMinusOne = numberOfVariables - 1;
-        unique = new HashSet<>();
     }
 
     public void addVariable(Variable variable){
@@ -35,7 +31,6 @@ public class UnequalityConstraint implements Constraint {
             }
         }
         return satisfied;
-//        return myVariables.stream().filter(Variable::isSet).map(Variable::getValue).allMatch(new HashSet<Integer>()::add);
     }
 
     @Override

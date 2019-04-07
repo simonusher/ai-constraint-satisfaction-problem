@@ -165,5 +165,4 @@ public class Variable {
     public HistoryPair getHistorySize(){
         return new HistoryPair(this, domainHistory.size());
     }
-
 }
