@@ -8,6 +8,9 @@ public class SmallerThanConstraint implements Constraint {
     private Variable smallerVariable;
     private List<Integer> wholeDomain;
 
+    private Integer maxValue;
+    private Integer minValue;
+
     public SmallerThanConstraint(List<Integer> wholeDomain) {
         myVariables = new ArrayList<>();
         this.wholeDomain = wholeDomain;
@@ -17,6 +20,8 @@ public class SmallerThanConstraint implements Constraint {
         this(wholeDomain);
         setGreaterVariable(greaterVariable);
         setSmallerVariable(smallerVariable);
+        this.wholeDomain.stream().min(Integer::compareTo).ifPresent(value -> minValue = value);
+        this.wholeDomain.stream().max(Integer::compareTo).ifPresent(value -> maxValue = value);
     }
 
     public void setGreaterVariable(Variable greaterVariable) {
@@ -36,6 +41,12 @@ public class SmallerThanConstraint implements Constraint {
 
     @Override
     public boolean isSatisfied() {
+        if((smallerVariable.isSet() && smallerVariable.getValue().equals(maxValue)) ||
+                greaterVariable.isSet() && greaterVariable.getValue().equals(minValue))
+        {
+            return false;
+        }
+
         return greaterVariable.isGreaterThan(smallerVariable);
     }
 
