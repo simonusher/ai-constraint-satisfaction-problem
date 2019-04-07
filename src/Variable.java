@@ -8,13 +8,13 @@ public class Variable {
     private List<Integer> availableDomain;
     private boolean isSet;
     private boolean isFixed;
-    private Set<Constraint> myConstraints;
+    private List<Constraint> myConstraints;
     private Integer value;
 
 
     public Variable(List<Integer> wholeDomain) {
         this.wholeDomain = wholeDomain;
-        this.myConstraints = new HashSet<>();
+        this.myConstraints = new LinkedList<>();
         this.isFixed = false;
         this.isSet = false;
         this.resetDomain();
@@ -22,7 +22,7 @@ public class Variable {
 
     public Variable(List<Integer> wholeDomain, Integer initialValue) {
         this.wholeDomain = wholeDomain;
-        this.myConstraints = new HashSet<>();
+        this.myConstraints = new LinkedList<>();
         this.isFixed = true;
         this.resetDomain();
         setValue(initialValue);
@@ -127,5 +127,19 @@ public class Variable {
 
     public int getAvailableDomainSize() {
         return this.availableDomain.size();
+    }
+
+    public boolean removeValueFromDomain(Integer value){
+        availableDomain.remove(value);
+        return !availableDomain.isEmpty();
+    }
+
+    public boolean removeValuesFromDomain(List<Integer> incorrectValues){
+        availableDomain.removeAll(incorrectValues);
+        return !availableDomain.isEmpty();
+    }
+
+    public boolean clearConstrainedVariablesDomains(){
+        return myConstraints.stream().allMatch(constraint -> constraint.removeIncorrectVariableValues(this));
     }
 }

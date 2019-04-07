@@ -39,24 +39,21 @@ public class SmallerThanConstraint implements Constraint {
         return greaterVariable.isGreaterThan(smallerVariable);
     }
 
-//    @Override
-//    public boolean removeIncorrectVariableValues(Variable changedVariable) {
-//        List<Integer> incorrectValues;
-//        if (changedVariable == smallerVariable) {
-//            if(greaterVariable.isSet()){
-//                return true;
-//            } else {
-//                incorrectValues = this.wholeDomain.stream().filter(val -> val <= changedVariable.getValue()).collect(Collectors.toList());
-//                return greaterVariable.removeValuesFromDomain(incorrectValues);
-//            }
-//        } else {
-//            if(smallerVariable.isSet()){
-//                return true;
-//            } else {
-//                incorrectValues = this.wholeDomain.stream().filter(val -> val >= changedVariable.getValue()).collect(Collectors.toList());
-//                return smallerVariable.removeValuesFromDomain(incorrectValues);
-//            }
-//        }
-//    }
-
+    @Override
+    public boolean removeIncorrectVariableValues(Variable changedVariable) {
+        if(changedVariable == smallerVariable){
+            if(!greaterVariable.isSet()){
+                Integer smallerValue = smallerVariable.getValue();
+                List<Integer> incorrectValues = wholeDomain.stream().filter(value -> value <= smallerValue).collect(Collectors.toList());
+                return greaterVariable.removeValuesFromDomain(incorrectValues);
+            }
+        } else if(changedVariable == greaterVariable){
+            if(!smallerVariable.isSet()){
+                Integer greaterValue = greaterVariable.getValue();
+                List<Integer> incorrectValues = wholeDomain.stream().filter(value -> value >= greaterValue).collect(Collectors.toList());
+                return smallerVariable.removeValuesFromDomain(incorrectValues);
+            }
+        }
+        return true;
+    }
 }

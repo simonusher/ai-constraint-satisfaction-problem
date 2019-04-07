@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UnequalityConstraint implements Constraint {
     private List<Variable> myVariables;
@@ -34,10 +33,11 @@ public class UnequalityConstraint implements Constraint {
         return satisfied;
     }
 
-//    @Override
-//    public boolean removeIncorrectVariableValues(Variable changedVariable) {
-//        return myVariables.stream()
-//                .filter(variable -> variable != changedVariable && !variable.isSet())
-//                .allMatch(variable -> variable.removeValueFromDomain(changedVariable.getValue()));
-//    }
+    @Override
+    public boolean removeIncorrectVariableValues(Variable changedVariable) {
+        Integer value = changedVariable.getValue();
+        return myVariables.stream()
+                .filter(variable -> variable != changedVariable && !variable.isSet())
+                .allMatch(variable -> variable.removeValueFromDomain(value));
+    }
 }

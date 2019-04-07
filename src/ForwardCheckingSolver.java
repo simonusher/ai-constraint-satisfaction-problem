@@ -1,6 +1,4 @@
-import java.util.Comparator;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class ForwardCheckingSolver {
     private Problem problem;
@@ -26,6 +24,7 @@ public class ForwardCheckingSolver {
 
     private void sortVariables() {
 //        this.variables.sort(Comparator.comparingInt(Variable::getNumberOfConstraints));
+//        this.variables.forEach(Variable::recalculateAvailableDomain);
         this.variables.sort(mrvComparator);
     }
 
