@@ -3,44 +3,37 @@ import java.util.stream.Collectors;
 
 public class ForwardCheckingSolver {
     private Problem problem;
-    private List<Constraint> constraints;
     private List<Variable> variables;
-
-    private Stack<Variable> variablesToCheck;
     private int numberOfCalls;
     private MrvComparator mrvComparator = new MrvComparator();
 
+    private int currentVariableIndex;
+
     public ForwardCheckingSolver(Problem problem) {
         this.problem = problem;
-        this.constraints = problem.getConstraints();
         this.variables = problem.getUnfixedVariables();
+        currentVariableIndex = 0;
     }
 
     public void solve() {
-        sortVariables();
-        resetVariablesToCheck();
-        this.numberOfCalls = 0;
+        init();
         checkNextVariable();
     }
 
-    private void sortVariables() {
-//        this.variables.sort(Comparator.comparingInt(Variable::getNumberOfConstraints));
-//        this.variables.forEach(Variable::recalculateAvailableDomain);
+    private void init() {
+        this.numberOfCalls = 0;
+        this.variables.forEach(Variable::recalculateAvailableDomain);
         this.variables.sort(mrvComparator);
-    }
-
-    private void resetVariablesToCheck() {
-        this.variablesToCheck = new Stack<>();
-        this.variablesToCheck.addAll(variables);
     }
 
     private void checkNextVariable(){
         numberOfCalls++;
-        if(variablesToCheck.empty()){
+        if(currentVariableIndex >= variables.size()){
             System.out.println("Found solution");
             problem.saveCurrentSolution();
         } else {
-            Variable currentVariable = variablesToCheck.pop();
+            Variable currentVariable = variables.get(currentVariableIndex);
+            currentVariableIndex++;
 
             HistoryPair currentVariableHistory = currentVariable.getHistorySize();
             currentVariable.pushHistoryStack();
@@ -54,7 +47,7 @@ public class ForwardCheckingSolver {
                 if(correctlyAssigned) {
                     boolean domainsNotEmpty = constrainedVariables.stream().allMatch(Variable::recalculateAvailableDomain);
                     if(domainsNotEmpty){
-                        selectNextVariable();
+                        sortVariables();
                         checkNextVariable();
                     }
                     historySizes.forEach(HistoryPair::reset);
@@ -64,7 +57,7 @@ public class ForwardCheckingSolver {
             currentVariable.resetValue();
 
             historySizes.forEach(HistoryPair::reset);
-            variablesToCheck.push(currentVariable);
+            currentVariableIndex--;
         }
     }
 
@@ -72,10 +65,7 @@ public class ForwardCheckingSolver {
         return numberOfCalls;
     }
 
-    private void selectNextVariable(){
-        variablesToCheck.stream().max(mrvComparator).ifPresent(variable -> {
-            variablesToCheck.remove(variable);
-            variablesToCheck.push(variable);
-        });
+    private void sortVariables(){
+        variables.subList(currentVariableIndex, variables.size()).sort(mrvComparator);
     }
 }
