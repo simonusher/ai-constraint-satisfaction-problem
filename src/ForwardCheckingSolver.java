@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ForwardCheckingSolver {
     private Problem problem;
@@ -41,7 +42,12 @@ public class ForwardCheckingSolver {
         } else {
             Variable currentVariable = variablesToCheck.pop();
 
+            HistoryPair currentVariableHistory = currentVariable.getHistorySize();
+            currentVariable.pushHistoryStack();
+
             List<Variable> constrainedVariables = currentVariable.getVariablesToChange();
+
+            List<HistoryPair> historySizes = constrainedVariables.stream().map(Variable::getHistorySize).collect(Collectors.toList());
 
             while(currentVariable.nextValue()){
                 boolean correctlyAssigned = currentVariable.correctlyAssigned();
@@ -51,10 +57,13 @@ public class ForwardCheckingSolver {
                         selectNextVariable();
                         checkNextVariable();
                     }
+                    historySizes.forEach(HistoryPair::reset);
                 }
             }
-            currentVariable.reset();
-            constrainedVariables.forEach(variable -> variable.reset());
+            currentVariableHistory.reset();
+            currentVariable.resetValue();
+
+            historySizes.forEach(HistoryPair::reset);
             variablesToCheck.push(currentVariable);
         }
     }

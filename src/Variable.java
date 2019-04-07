@@ -11,6 +11,8 @@ public class Variable {
     private List<Constraint> myConstraints;
     private Integer value;
 
+    private Stack<List<Integer>> domainHistory;
+
 
     public Variable(List<Integer> wholeDomain) {
         this.wholeDomain = wholeDomain;
@@ -18,6 +20,7 @@ public class Variable {
         this.isFixed = false;
         this.isSet = false;
         this.resetDomain();
+        domainHistory = new Stack<>();
     }
 
     public Variable(List<Integer> wholeDomain, Integer initialValue) {
@@ -26,6 +29,7 @@ public class Variable {
         this.isFixed = true;
         this.resetDomain();
         setValue(initialValue);
+        domainHistory = new Stack<>();
     }
 
     public boolean isSet() {
@@ -112,7 +116,7 @@ public class Variable {
     }
 
     public boolean recalculateAvailableDomain(){
-        resetDomain();
+        pushHistoryStack();
         List<Integer> available = new LinkedList<>();
         for(int i = 0; i < availableDomain.size(); i++){
             setValue(availableDomain.get(i));
@@ -141,5 +145,22 @@ public class Variable {
 
     public boolean clearConstrainedVariablesDomains(){
         return myConstraints.stream().allMatch(constraint -> constraint.removeIncorrectVariableValues(this));
+    }
+
+    public void pushHistoryStack(){
+        domainHistory.push(availableDomain);
+        availableDomain = new LinkedList<>(availableDomain);
+    }
+
+    public void resetToHistoryState(Integer stateNumber){
+        List<Integer> oldAvailableDomain = availableDomain;
+        while(domainHistory.size() != stateNumber){
+            oldAvailableDomain = domainHistory.pop();
+        }
+        this.availableDomain = oldAvailableDomain;
+    }
+
+    public HistoryPair getHistorySize(){
+        return new HistoryPair(this, domainHistory.size());
     }
 }
