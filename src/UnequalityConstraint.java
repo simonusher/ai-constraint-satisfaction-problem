@@ -24,13 +24,15 @@ public class UnequalityConstraint implements Constraint {
 
     @Override
     public boolean isSatisfied() {
-        boolean satisfied = true;
-        for(int i = 0; i < variablesMinusOne && satisfied; i++) {
-            for(int j = i + 1; j < numberOfVariables && satisfied; j++) {
-                satisfied = !myVariables.get(i).isEqual(myVariables.get(j));
+        HashSet<Integer> unique = new HashSet<>(myVariables.size());
+        for (Variable myVariable : myVariables) {
+            if (myVariable.isSet()) {
+                if(!unique.add(myVariable.getValue())){
+                    return false;
+                }
             }
         }
-        return satisfied;
+        return true;
     }
 
     @Override

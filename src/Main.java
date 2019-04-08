@@ -3,7 +3,7 @@ public class Main {
         Problem problem = new FutoshikiProblem();
 //        Problem problem = new SkyscrapperProblem();
 //        problem.load("test_sky_6_3.txt");
-        problem.load("test_futo_9_2.txt");
+        problem.load("test_futo_9_1.txt");
         if(problem.isLoaded()){
             ForwardCheckingSolver solver = new ForwardCheckingSolver(problem);
 //            BacktrackingSolver solver = new BacktrackingSolver(problem);

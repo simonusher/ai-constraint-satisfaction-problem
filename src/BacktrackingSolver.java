@@ -4,7 +4,6 @@ import java.util.Stack;
 
 public class BacktrackingSolver {
     private Problem problem;
-    private List<Constraint> constraints;
     private List<Variable> variables;
 
     private Stack<Variable> variablesToCheck;
@@ -12,7 +11,6 @@ public class BacktrackingSolver {
 
     public BacktrackingSolver(Problem problem) {
         this.problem = problem;
-        this.constraints = problem.getConstraints();
         this.variables = problem.getUnfixedVariables();
     }
 

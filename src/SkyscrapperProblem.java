@@ -94,8 +94,8 @@ public class SkyscrapperProblem implements Problem {
                     .map(row -> row.get(columnNumber))
                     .collect(Collectors.toCollection(ArrayList::new));
 
-            Constraint columnConstraint = new SkyscrapperConstraint(columnVariables, topConstraints.get(i), bottomConstraints.get(i));
-            Constraint rowConstraint = new SkyscrapperConstraint(rowVariables, leftConstraints.get(i), rightConstraints.get(i));
+            Constraint columnConstraint = new SkyscrapperConstraint(columnVariables, topConstraints.get(i), bottomConstraints.get(i), wholeDomain);
+            Constraint rowConstraint = new SkyscrapperConstraint(rowVariables, leftConstraints.get(i), rightConstraints.get(i), wholeDomain);
 
             rowVariables.forEach(variable -> variable.addConstraint(rowConstraint));
             columnVariables.forEach(variable -> variable.addConstraint(columnConstraint));
