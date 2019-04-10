@@ -29,7 +29,7 @@ public class ForwardCheckingSolver {
     private void checkNextVariable(){
         numberOfCalls++;
         if(currentVariableIndex >= variables.size()){
-            System.out.println("Found solution");
+            System.out.println("Found solution, number of calls: " + numberOfCalls);
             problem.saveCurrentSolution();
         } else {
             Variable currentVariable = variables.get(currentVariableIndex);
@@ -43,6 +43,7 @@ public class ForwardCheckingSolver {
             List<HistoryPair> historySizes = constrainedVariables.stream().map(Variable::getHistorySize).collect(Collectors.toList());
 
             while(currentVariable.nextValue()){
+//            while(currentVariable.pickBestValue()){
                 boolean correctlyAssigned = currentVariable.correctlyAssigned();
                 if(correctlyAssigned) {
                     boolean domainsNotEmpty = constrainedVariables.stream().allMatch(Variable::recalculateAvailableDomain);

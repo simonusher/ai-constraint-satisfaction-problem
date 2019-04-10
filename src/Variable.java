@@ -63,6 +63,29 @@ public class Variable {
         }
     }
 
+    public boolean pickBestValue(){
+        if(availableDomain.isEmpty()){
+            return false;
+        }
+        else {
+            int maxPossibleValues = -1;
+            Integer bestValue = null;
+            List<Variable> constrainedVariables = this.getVariablesToChange();
+            for (Integer possibleValue : availableDomain) {
+                setValue(possibleValue);
+                int numberOfPossibleValues = constrainedVariables.stream()
+                        .mapToInt(Variable::getNumberOfCurrentlyPossibleValues).sum();
+                if(numberOfPossibleValues > maxPossibleValues){
+                    maxPossibleValues = numberOfPossibleValues;
+                    bestValue = possibleValue;
+                }
+            }
+            availableDomain.remove(bestValue);
+            setValue(bestValue);
+            return true;
+        }
+    }
+
     public void resetDomain() {
         this.availableDomain = new LinkedList<>();
         this.availableDomain.addAll(this.wholeDomain);
@@ -128,6 +151,15 @@ public class Variable {
         this.availableDomain = available;
         return !this.availableDomain.isEmpty();
     }
+
+    public int getNumberOfCurrentlyPossibleValues(){
+        int historyStateNumber = domainHistory.size();
+        recalculateAvailableDomain();
+        int possibleNumber = getAvailableDomainSize();
+        resetToHistoryState(historyStateNumber);
+        return possibleNumber;
+    }
+
 
     public int getAvailableDomainSize() {
         return this.availableDomain.size();
