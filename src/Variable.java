@@ -53,6 +53,10 @@ public class Variable {
         myConstraints.add(constraint);
     }
 
+    public boolean hasNextValue(){
+        return !availableDomain.isEmpty();
+    }
+
     public boolean nextValue(){
         if(availableDomain.isEmpty()){
             return false;

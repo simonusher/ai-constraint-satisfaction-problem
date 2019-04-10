@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public abstract class TabularProblem  implements Problem {
-    protected static final String RESULT_LOCATION = "results/";
     protected static final String DELIMITER = ";";
     protected static final String TEST_FILES_LOCATION = "test_files/";
     protected int boardSize;
@@ -22,10 +21,12 @@ public abstract class TabularProblem  implements Problem {
 
     protected String filename;
     protected boolean isLoaded;
+    protected String RESULT_LOCATION;
 
     private static final float TIME_UNIT = 1000000000f;
 
-    public TabularProblem() {
+    public TabularProblem(String resultFolderName) {
+        RESULT_LOCATION = resultFolderName;
         savedSolutions = new ArrayList<>();
         numbersOfCallsToFind = new ArrayList<>();
         elapsedTimesToFind = new ArrayList<>();

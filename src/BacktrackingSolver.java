@@ -8,7 +8,16 @@ public class BacktrackingSolver {
     private BacktrackingMrvComparator mrvComparator = new BacktrackingMrvComparator();
     private Long solvingStartTime;
 
-    public BacktrackingSolver(Problem problem) {
+
+    boolean shouldUseVariableHeuristic;
+    boolean shouldUseValueHeuristic;
+
+    public BacktrackingSolver(Problem problem,
+                              boolean shouldUseVariableHeuristic,
+                              boolean shouldUseValueHeuristic
+    ) {
+        this.shouldUseValueHeuristic = shouldUseValueHeuristic;
+        this.shouldUseVariableHeuristic = shouldUseVariableHeuristic;
         this.problem = problem;
         this.variables = problem.getUnfixedVariables();
         this.currentVariableIndex = 0;
@@ -33,8 +42,12 @@ public class BacktrackingSolver {
             Variable currentVariable = variables.get(currentVariableIndex);
             currentVariableIndex++;
 
-            while(currentVariable.nextValue()){
-//            while(currentVariable.pickBestValue()){
+            while(currentVariable.hasNextValue()){
+                if(shouldUseValueHeuristic){
+                    currentVariable.pickBestValue();
+                } else {
+                    currentVariable.nextValue();
+                }
                 boolean correctlyAssigned = currentVariable.correctlyAssigned();
                 if(correctlyAssigned) {
                     sortVariables();
@@ -51,6 +64,8 @@ public class BacktrackingSolver {
     }
 
     private void sortVariables(){
-        variables.subList(currentVariableIndex, variables.size()).sort(mrvComparator);
+        if(shouldUseVariableHeuristic){
+            variables.subList(currentVariableIndex, variables.size()).sort(mrvComparator);
+        }
     }
 }

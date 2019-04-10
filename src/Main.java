@@ -1,18 +1,86 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
-//        Problem problem = new FutoshikiProblem();
-//        problem.load("test_futo_8_1.txt");
-        Problem problem = new SkyscrapperProblem();
-        problem.load("test_sky_5_0.txt");
-        if(problem.isLoaded()){
-//            ForwardCheckingSolver solver = new ForwardCheckingSolver(problem);
-            BacktrackingSolver solver = new BacktrackingSolver(problem);
-            long startTime = System.nanoTime();
-            solver.solve();
-            long endTime = System.nanoTime();
-            long elapsedTime = endTime - startTime;
-            System.out.println("Execution time in seconds: " + elapsedTime / 1000000000f);
-            System.out.println(solver.getNumberOfCalls());
-        }
+        List<String> filenames = new ArrayList<>(List.of(
+                "test_futo_4_0.txt",
+                "test_futo_4_1.txt",
+                "test_futo_4_2.txt",
+                "test_futo_5_0.txt",
+                "test_futo_5_1.txt",
+                "test_futo_5_2.txt",
+                "test_futo_6_0.txt",
+                "test_futo_6_1.txt",
+                "test_futo_6_2.txt",
+                "test_futo_7_0.txt",
+                "test_futo_7_1.txt",
+                "test_futo_7_2.txt",
+                "test_futo_8_0.txt",
+                "test_futo_8_1.txt",
+                "test_futo_8_2.txt",
+                "test_futo_9_0.txt",
+                "test_futo_9_1.txt",
+                "test_futo_9_2.txt",
+                "test_sky_4_0.txt",
+                "test_sky_4_1.txt",
+                "test_sky_4_2.txt",
+                "test_sky_4_3.txt",
+                "test_sky_4_4.txt",
+                "test_sky_5_0.txt",
+                "test_sky_5_1.txt",
+                "test_sky_5_2.txt",
+                "test_sky_5_3.txt",
+                "test_sky_5_4.txt",
+                "test_sky_5_0.txt",
+                "test_sky_6_1.txt",
+                "test_sky_6_2.txt",
+                "test_sky_6_3.txt",
+                "test_sky_6_4.txt"
+        ));
+
+        Tester tester = new Tester(filenames, true, false);
+        tester.runTests();
+        tester = new Tester(filenames, true, true);
+        tester.runTests();
+
+        filenames = new ArrayList<>(List.of(
+                "test_futo_4_0.txt",
+                "test_futo_4_1.txt",
+                "test_futo_4_2.txt",
+                "test_futo_5_0.txt",
+                "test_futo_5_1.txt",
+                "test_futo_5_2.txt",
+                "test_futo_6_0.txt",
+                "test_futo_6_1.txt",
+                "test_futo_6_2.txt",
+                "test_futo_7_0.txt",
+                "test_futo_7_1.txt",
+                "test_futo_7_2.txt",
+                "test_sky_4_0.txt",
+                "test_sky_4_1.txt",
+                "test_sky_4_2.txt",
+                "test_sky_4_3.txt",
+                "test_sky_4_4.txt",
+                "test_sky_5_0.txt",
+                "test_sky_5_1.txt",
+                "test_sky_5_2.txt",
+                "test_sky_5_3.txt",
+                "test_sky_5_4.txt",
+                "test_sky_5_0.txt",
+                "test_futo_8_0.txt",
+                "test_futo_8_1.txt",
+                "test_futo_8_2.txt",
+                "test_futo_9_0.txt",
+                "test_futo_9_1.txt",
+                "test_futo_9_2.txt",
+                "test_sky_6_1.txt",
+                "test_sky_6_2.txt",
+                "test_sky_6_3.txt",
+                "test_sky_6_4.txt"
+        ));
+
+        tester = new Tester(filenames, false, false);
+        tester.runTests();
     }
 }

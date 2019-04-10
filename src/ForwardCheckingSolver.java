@@ -6,12 +6,19 @@ public class ForwardCheckingSolver {
     private List<Variable> variables;
     private int numberOfCalls;
     private MrvComparator mrvComparator = new MrvComparator();
+    private int currentVariableIndex;
 
     private Long solvingStartTime;
 
-    private int currentVariableIndex;
+    private boolean shouldUseVariableHeuristic;
+    private boolean shouldUseValueHeuristic;
 
-    public ForwardCheckingSolver(Problem problem) {
+    public ForwardCheckingSolver(Problem problem,
+                                 boolean shouldUseVariableHeuristic,
+                                 boolean shouldUseValueHeuristic
+    ) {
+        this.shouldUseValueHeuristic = shouldUseValueHeuristic;
+        this.shouldUseVariableHeuristic = shouldUseVariableHeuristic;
         this.problem = problem;
         this.variables = problem.getUnfixedVariables();
         currentVariableIndex = 0;
@@ -45,11 +52,16 @@ public class ForwardCheckingSolver {
             currentVariable.pushHistoryState();
 
             List<Variable> constrainedVariables = currentVariable.getVariablesToChange();
+            List<HistoryState> historyStates = constrainedVariables.stream()
+                    .map(Variable::getHistoryState)
+                    .collect(Collectors.toList());
 
-            List<HistoryState> historySizes = constrainedVariables.stream().map(Variable::getHistoryState).collect(Collectors.toList());
-
-            while(currentVariable.nextValue()){
-//            while(currentVariable.pickBestValue()){
+            while(currentVariable.hasNextValue()){
+                if(shouldUseValueHeuristic){
+                    currentVariable.pickBestValue();
+                } else {
+                    currentVariable.nextValue();
+                }
                 boolean correctlyAssigned = currentVariable.correctlyAssigned();
                 if(correctlyAssigned) {
                     boolean domainsNotEmpty = constrainedVariables.stream().allMatch(Variable::recalculateAvailableDomain);
@@ -57,13 +69,13 @@ public class ForwardCheckingSolver {
                         sortVariables();
                         checkNextVariable();
                     }
-                    historySizes.forEach(HistoryState::reset);
+                    historyStates.forEach(HistoryState::reset);
                 }
             }
             currentVariableHistory.reset();
             currentVariable.resetValue();
 
-            historySizes.forEach(HistoryState::reset);
+            historyStates.forEach(HistoryState::reset);
             currentVariableIndex--;
         }
     }
@@ -73,6 +85,8 @@ public class ForwardCheckingSolver {
     }
 
     private void sortVariables(){
-        variables.subList(currentVariableIndex, variables.size()).sort(mrvComparator);
+        if(shouldUseVariableHeuristic) {
+            variables.subList(currentVariableIndex, variables.size()).sort(mrvComparator);
+        }
     }
 }

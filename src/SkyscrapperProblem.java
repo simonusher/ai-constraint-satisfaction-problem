@@ -11,6 +11,10 @@ public class SkyscrapperProblem extends TabularProblem {
     private static final String SKYSCRAPPER_OPENING_ERROR = "Couldn't read Skyscrapper file from %s";
     private static final String SKYSCRAPPER_FORMAT_ERROR = "Incorrectly formatted Skyscrapper file %s in line number: %d";
 
+    public SkyscrapperProblem(String resultFolderName) {
+        super(resultFolderName);
+    }
+
     @Override
     public void load(String filename) {
         String pathName = TEST_FILES_LOCATION + filename;

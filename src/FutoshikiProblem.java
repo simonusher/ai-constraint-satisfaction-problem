@@ -11,6 +11,10 @@ public class FutoshikiProblem extends TabularProblem {
     private static final String FUTOSHIKI_FORMAT_ERROR = "Incorrectly formatted Futoshiki file %s in line number: %d";
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    public FutoshikiProblem(String resultFolderName) {
+        super(resultFolderName);
+    }
+
     @Override
     public void load(String filename) {
         String pathName = TEST_FILES_LOCATION + filename;
