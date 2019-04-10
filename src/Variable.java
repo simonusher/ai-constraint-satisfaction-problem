@@ -73,12 +73,8 @@ public class Variable {
             List<Variable> constrainedVariables = this.getVariablesToChange();
             for (Integer possibleValue : availableDomain) {
                 setValue(possibleValue);
-                int numberOfPossibleValues = 0;
-                for (Variable constrainedVariable : constrainedVariables) {
-                    numberOfPossibleValues += constrainedVariable.getNumberOfCurrentlyPossibleValues();
-                }
-//                int numberOfPossibleValues = constrainedVariables.stream()
-//                        .mapToInt(Variable::getNumberOfCurrentlyPossibleValues).sum();
+                int numberOfPossibleValues = constrainedVariables.stream()
+                        .mapToInt(Variable::getNumberOfCurrentlyPossibleValues).sum();
                 if(numberOfPossibleValues > maxPossibleValues){
                     maxPossibleValues = numberOfPossibleValues;
                     bestValue = possibleValue;
@@ -106,21 +102,8 @@ public class Variable {
         this.isSet = false;
     }
 
-    public boolean isEqual(Variable other){
-        return this.isSet && other.isSet && this.value.equals(other.value);
-    }
-
-    public boolean equals(Variable other){
-        return this.value.equals(other.value);
-    }
-
-
     public boolean isGreaterThan(Variable other){
         return !this.isSet || !other.isSet || this.value > other.value;
-    }
-
-    public boolean isSmallerThan(Variable other){
-        return !this.isSet || !other.isSet || this.value < other.value;
     }
 
     public boolean correctlyAssigned(){
@@ -143,7 +126,7 @@ public class Variable {
     }
 
     public boolean recalculateAvailableDomain(){
-        pushHistoryStack();
+        pushHistoryState();
         List<Integer> available = new LinkedList<>();
         for(int i = 0; i < availableDomain.size(); i++){
             setValue(availableDomain.get(i));
@@ -157,7 +140,7 @@ public class Variable {
     }
 
     public int getNumberOfCurrentlyPossibleValues(){
-        HistoryPair historyState = getHistorySize();
+        HistoryState historyState = getHistoryState();
         recalculateAvailableDomain();
         int possibleNumber = getAvailableDomainSize();
         historyState.reset();
@@ -169,36 +152,22 @@ public class Variable {
         return this.availableDomain.size();
     }
 
-    public boolean removeValueFromDomain(Integer value){
-        pushHistoryStack();
-        availableDomain.remove(value);
-        return !availableDomain.isEmpty();
-    }
-
-    public boolean removeValuesFromDomain(List<Integer> incorrectValues){
-        pushHistoryStack();
-        availableDomain.removeAll(incorrectValues);
-        return !availableDomain.isEmpty();
-    }
-
-    public boolean clearConstrainedVariablesDomains(){
-        return myConstraints.stream().allMatch(constraint -> constraint.removeIncorrectVariableValues(this));
-    }
-
-    public void pushHistoryStack(){
+    public void pushHistoryState(){
         domainHistory.push(availableDomain);
         availableDomain = new LinkedList<>(availableDomain);
     }
 
-    public void resetToHistoryState(Integer stateNumber){
-        List<Integer> oldAvailableDomain = availableDomain;
-        while(domainHistory.size() != stateNumber){
-            oldAvailableDomain = domainHistory.pop();
-        }
-        this.availableDomain = oldAvailableDomain;
+    public void popHistoryState(){
+        this.availableDomain = domainHistory.pop();
     }
 
-    public HistoryPair getHistorySize(){
-        return new HistoryPair(this, domainHistory.size());
+    public void resetToHistoryState(Integer stateNumber){
+        while(domainHistory.size() != stateNumber){
+            popHistoryState();
+        }
+    }
+
+    public HistoryState getHistoryState(){
+        return new HistoryState(this, domainHistory.size());
     }
 }

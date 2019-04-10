@@ -35,12 +35,12 @@ public class ForwardCheckingSolver {
             Variable currentVariable = variables.get(currentVariableIndex);
             currentVariableIndex++;
 
-            HistoryPair currentVariableHistory = currentVariable.getHistorySize();
-            currentVariable.pushHistoryStack();
+            HistoryState currentVariableHistory = currentVariable.getHistoryState();
+            currentVariable.pushHistoryState();
 
             List<Variable> constrainedVariables = currentVariable.getVariablesToChange();
 
-            List<HistoryPair> historySizes = constrainedVariables.stream().map(Variable::getHistorySize).collect(Collectors.toList());
+            List<HistoryState> historySizes = constrainedVariables.stream().map(Variable::getHistoryState).collect(Collectors.toList());
 
             while(currentVariable.nextValue()){
 //            while(currentVariable.pickBestValue()){
@@ -51,13 +51,13 @@ public class ForwardCheckingSolver {
                         sortVariables();
                         checkNextVariable();
                     }
-                    historySizes.forEach(HistoryPair::reset);
+                    historySizes.forEach(HistoryState::reset);
                 }
             }
             currentVariableHistory.reset();
             currentVariable.resetValue();
 
-            historySizes.forEach(HistoryPair::reset);
+            historySizes.forEach(HistoryState::reset);
             currentVariableIndex--;
         }
     }

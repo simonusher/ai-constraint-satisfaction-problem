@@ -55,9 +55,4 @@ public class SkyscrapperConstraint implements Constraint {
         return (skyscrapersFromLeft == 0 || nFromLeft == skyscrapersFromLeft)
                 && (skyscrapersFromRight == 0 || nFromRight == skyscrapersFromRight);
     }
-
-    @Override
-    public boolean removeIncorrectVariableValues(Variable changedVariable) {
-        return false;
-    }
 }

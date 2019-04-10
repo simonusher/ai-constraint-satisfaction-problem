@@ -1,8 +1,8 @@
-public class HistoryPair {
+public class HistoryState {
     public Variable variable;
     public Integer historySize;
 
-    public HistoryPair(Variable variable, Integer historySize) {
+    public HistoryState(Variable variable, Integer historySize) {
         this.variable = variable;
         this.historySize = historySize;
     }
