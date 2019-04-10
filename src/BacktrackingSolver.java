@@ -1,13 +1,11 @@
-import java.util.Comparator;
 import java.util.List;
-import java.util.Stack;
 
 public class BacktrackingSolver {
     private Problem problem;
     private List<Variable> variables;
-
-    private Stack<Variable> variablesToCheck;
+    private int currentVariableIndex;
     private int numberOfCalls;
+    private BacktrackingMrvComparator mrvComparator = new BacktrackingMrvComparator();
 
     public BacktrackingSolver(Problem problem) {
         this.problem = problem;
@@ -16,40 +14,38 @@ public class BacktrackingSolver {
 
     public void solve() {
         sortVariables();
-        resetVariablesToCheck();
         this.numberOfCalls = 0;
+        this.currentVariableIndex = 0;
         checkNextVariable();
-    }
-
-    private void sortVariables() {
-        this.variables.sort(Comparator.comparingInt(Variable::getNumberOfConstraints));
-    }
-
-    private void resetVariablesToCheck() {
-        this.variablesToCheck = new Stack<>();
-        this.variablesToCheck.addAll(variables);
     }
 
     private void checkNextVariable(){
         numberOfCalls++;
-        if(variablesToCheck.empty()){
-            System.out.println("Found solution");
+        if(currentVariableIndex >= variables.size()){
+            System.out.println("Found solution, number of calls: " + numberOfCalls);
             problem.saveCurrentSolution();
         } else {
-            Variable currentVariable = variablesToCheck.pop();
+            Variable currentVariable = variables.get(currentVariableIndex);
+            currentVariableIndex++;
 
             while(currentVariable.nextValue()){
+//            while(currentVariable.pickBestValue()){
                 boolean correctlyAssigned = currentVariable.correctlyAssigned();
                 if(correctlyAssigned) {
+                    sortVariables();
                     checkNextVariable();
                 }
             }
             currentVariable.reset();
-            variablesToCheck.push(currentVariable);
+            currentVariableIndex--;
         }
     }
 
     public int getNumberOfCalls() {
         return numberOfCalls;
+    }
+
+    private void sortVariables(){
+        variables.subList(currentVariableIndex, variables.size()).sort(mrvComparator);
     }
 }
