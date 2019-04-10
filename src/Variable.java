@@ -73,8 +73,12 @@ public class Variable {
             List<Variable> constrainedVariables = this.getVariablesToChange();
             for (Integer possibleValue : availableDomain) {
                 setValue(possibleValue);
-                int numberOfPossibleValues = constrainedVariables.stream()
-                        .mapToInt(Variable::getNumberOfCurrentlyPossibleValues).sum();
+                int numberOfPossibleValues = 0;
+                for (Variable constrainedVariable : constrainedVariables) {
+                    numberOfPossibleValues += constrainedVariable.getNumberOfCurrentlyPossibleValues();
+                }
+//                int numberOfPossibleValues = constrainedVariables.stream()
+//                        .mapToInt(Variable::getNumberOfCurrentlyPossibleValues).sum();
                 if(numberOfPossibleValues > maxPossibleValues){
                     maxPossibleValues = numberOfPossibleValues;
                     bestValue = possibleValue;
@@ -153,10 +157,10 @@ public class Variable {
     }
 
     public int getNumberOfCurrentlyPossibleValues(){
-        int historyStateNumber = domainHistory.size();
+        HistoryPair historyState = getHistorySize();
         recalculateAvailableDomain();
         int possibleNumber = getAvailableDomainSize();
-        resetToHistoryState(historyStateNumber);
+        historyState.reset();
         return possibleNumber;
     }
 

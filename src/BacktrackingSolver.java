@@ -10,12 +10,12 @@ public class BacktrackingSolver {
     public BacktrackingSolver(Problem problem) {
         this.problem = problem;
         this.variables = problem.getUnfixedVariables();
+        this.currentVariableIndex = 0;
     }
 
     public void solve() {
-        sortVariables();
         this.numberOfCalls = 0;
-        this.currentVariableIndex = 0;
+        sortVariables();
         checkNextVariable();
     }
 
