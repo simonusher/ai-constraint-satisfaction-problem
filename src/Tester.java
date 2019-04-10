@@ -14,8 +14,8 @@ public class Tester {
 
     public void runTests(){
         for (String problemFileName : problemFileNames) {
-            solveWithBacktracking(problemFileName);
             solveWithForwardChecking(problemFileName);
+            solveWithBacktracking(problemFileName);
         }
     }
 

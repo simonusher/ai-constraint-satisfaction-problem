@@ -31,6 +31,23 @@ public class SkyscrapperConstraint implements Constraint {
 
         Integer currentMaxFromLeft = myVariables.get(0).getValue();
         Integer currentMaxFromRight = myVariables.get(myVariables.size() - 1).getValue();
+
+        if(currentMaxFromLeft != null && currentMaxFromLeft.equals(maxHeight) && skyscrapersFromLeft > 1){
+            return false;
+        }
+
+        if(currentMaxFromRight != null && currentMaxFromRight.equals(maxHeight) && skyscrapersFromRight > 1){
+            return false;
+        }
+
+        if(currentMaxFromLeft != null && currentMaxFromLeft.equals(minHeight) && skyscrapersFromLeft == 1){
+            return false;
+        }
+
+        if(currentMaxFromRight != null && currentMaxFromRight.equals(minHeight) && skyscrapersFromRight == 1){
+            return false;
+        }
+
         for (int i = 0, j = myVariables.size() - 1; i < myVariables.size(); i++, j--) {
             Variable leftVariable = myVariables.get(i);
             Variable rightVariable = myVariables.get(j);
