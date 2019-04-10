@@ -6,6 +6,7 @@ public class BacktrackingSolver {
     private int currentVariableIndex;
     private int numberOfCalls;
     private BacktrackingMrvComparator mrvComparator = new BacktrackingMrvComparator();
+    private Long solvingStartTime;
 
     public BacktrackingSolver(Problem problem) {
         this.problem = problem;
@@ -14,16 +15,20 @@ public class BacktrackingSolver {
     }
 
     public void solve() {
+        solvingStartTime = System.nanoTime();
         this.numberOfCalls = 0;
         sortVariables();
         checkNextVariable();
+        Long runningTime = System.nanoTime() - solvingStartTime;
+        problem.saveSolutionsToFile(numberOfCalls, runningTime);
     }
 
     private void checkNextVariable(){
         numberOfCalls++;
         if(currentVariableIndex >= variables.size()){
             System.out.println("Found solution, number of calls: " + numberOfCalls);
-            problem.saveCurrentSolution();
+            Long elapsedTime = System.nanoTime() - solvingStartTime;
+            problem.saveCurrentSolution(numberOfCalls, elapsedTime);
         } else {
             Variable currentVariable = variables.get(currentVariableIndex);
             currentVariableIndex++;

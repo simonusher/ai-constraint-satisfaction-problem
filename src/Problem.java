@@ -9,6 +9,6 @@ public interface Problem {
     List<Variable> getUnfixedVariables();
     Collection<Integer> getWholeDomain();
 
-    void saveCurrentSolution();
-    void saveSolutionsToFile();
+    void saveCurrentSolution(int numberOfCalls, Long elapsedTime);
+    void saveSolutionsToFile(int numberOfCalls, Long elapsedTime);
 }

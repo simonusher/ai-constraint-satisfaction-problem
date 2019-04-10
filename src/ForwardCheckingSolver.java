@@ -7,6 +7,8 @@ public class ForwardCheckingSolver {
     private int numberOfCalls;
     private MrvComparator mrvComparator = new MrvComparator();
 
+    private Long solvingStartTime;
+
     private int currentVariableIndex;
 
     public ForwardCheckingSolver(Problem problem) {
@@ -16,8 +18,11 @@ public class ForwardCheckingSolver {
     }
 
     public void solve() {
+        solvingStartTime = System.nanoTime();
         init();
         checkNextVariable();
+        Long runningTime = System.nanoTime() - solvingStartTime;
+        problem.saveSolutionsToFile(numberOfCalls, runningTime);
     }
 
     private void init() {
@@ -30,7 +35,8 @@ public class ForwardCheckingSolver {
         numberOfCalls++;
         if(currentVariableIndex >= variables.size()){
             System.out.println("Found solution, number of calls: " + numberOfCalls);
-            problem.saveCurrentSolution();
+            Long elapsedTime = System.nanoTime() - solvingStartTime;
+            problem.saveCurrentSolution(numberOfCalls, elapsedTime);
         } else {
             Variable currentVariable = variables.get(currentVariableIndex);
             currentVariableIndex++;
