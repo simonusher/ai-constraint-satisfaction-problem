@@ -13,8 +13,10 @@ public class Tester {
     }
 
     public void runTests(){
+//        for (String problemFileName : problemFileNames) {
+//            solveWithForwardChecking(problemFileName);
+//        }
         for (String problemFileName : problemFileNames) {
-            solveWithForwardChecking(problemFileName);
             solveWithBacktracking(problemFileName);
         }
     }

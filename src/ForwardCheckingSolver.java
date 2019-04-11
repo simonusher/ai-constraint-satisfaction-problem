@@ -35,7 +35,9 @@ public class ForwardCheckingSolver {
     private void init() {
         this.numberOfCalls = 0;
         this.variables.forEach(Variable::recalculateAvailableDomain);
-        this.variables.sort(mrvComparator);
+        if(shouldUseVariableHeuristic){
+            this.variables.sort(mrvComparator);
+        }
     }
 
     private void checkNextVariable(){

@@ -1,0 +1,113 @@
+\documentclass{article}
+\usepackage{polski}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{float}
+\hypersetup{%
+	pdfborder = {0 0 0}
+}
+
+\author{Szymon Woźniak, 235040}
+\date{12.04.2019}
+\title{Sprawozdanie 2\\Problem spełniania ograniczeń}
+
+
+\begin{document}
+	\pagenumbering{gobble}
+	\maketitle
+	\newpage
+	\pagenumbering{arabic}
+	
+	\section{Wstęp teoretyczny}
+	\subsection{Problem spełniania ograniczeń}
+	Problemy spełniania ograniczeń można zdefiniować poprzez trzy terminy: 
+	\begin{itemize}
+		\item zmienne: $V_{1}, V_{2}, ..., V_{k}$
+		\item dziedziny zmiennych: $D_{1}, D_{2}, ..., D_{k}$
+		\item ograniczenia: $C_{1}, C_{2}, ..., C_{L}$
+	\end{itemize}
+	W każdym z ograniczeń jest może być uwikłanych od $1$ do $n$ zmiennych.
+	Celem zadania spełniania ograniczeń, jest znalezienie takiego przypisania wartości $v_i$ każdej zmiennej $V_i$, że $v_i \in D_i$ i żadne z ograniczeń $C_j$ nie jest złamane.
+	Bardziej ogólnie, celem takiego zadania może być również znaleznienie wszystkich tego typu przypisań i to właśnie zostanie rozpatrzone w tej pracy.
+	\subsection{Rozwiązywane problemy}
+	\subsubsection{Wspólne cechy}
+	\paragraph{Zmienne}\mbox{}\\
+	Oba rozwiązywane w tej pracy problemy, są łamigłówkami logicznymi przedstawianymi jako kwadratowa plansza, składająca się z $n \times n$ pól. W terminach problemów spełniania ograniczeń każde pole jest zmienną o dziedzinie składającej się z liczb całkowitych $1..n$.
+	\paragraph{Ograniczenia}\mbox{}\\
+	Dla obu problemów definiuje się również takie samo ograniczenie, mówiące że w żadnej z kolumn i w żadnym z wierszy planszy nie mogą wystąpić powtarzające się wartości. W każdym tego typu problemie występuje zatem co najmniej $2n$ ograniczeń, a w każdym z nich uwikłanych jest $n$ zmiennych.
+	
+	\paragraph{Rozmiar przestrzeni rozwiązań}\mbox{}\\
+	Tak jak już wcześniej wspomniano, w obu problemach występuje $n \times n$ zmiennych, a dziedzina każdej z nich składa się z $n$ wartości. Oznacza to więc, że rozmiar pełnej przestrzeni rozwiązań wynosi:
+	\begin{equation}\label{eq:search_space_size}
+		S = n^{n^{2}}
+	\end{equation}
+	Rozmiar przestrzeni rośnie w zastraszającym tempie. Dla $n=5$ jest to już $S \approx 2,98 \cdot 10^{17}$. W oczywisty sposób świadczy to o tym, że szukanie rozwiązań metodą przeglądu zupełnego nie może się sprawdzić dla tej klasy problemów.
+	\subsubsection{Futoshiki}
+	Futoshiki jest łamigłówką logiczną, w której przykładowa plansza może wyglądać następująco:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.3\linewidth]{futo.png}
+		\caption{Przykładowa plansza Futoshiki}
+		\label{fig:futoshiki_board}
+	\end{figure}
+	Oprócz wspomnianego już wcześniej ograniczenia nakładanego na kolumny i wiersze, w tym problemie definiuje się jeszcze jedno. Na obrazku \ref{fig:futoshiki_board} jest pokazane jako znaki nierówności pomiędzy dwoma sąsiadującymi polami. Oznacza to, że wartości przypisane tym zmiennym muszą spełniać daną nierówność. Przykład niespełnienia tego typu ograniczenia jest został przedstawiony na rysunku \ref{fig:futoshiki_board_incorrect}.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.3\linewidth]{futo2.png}
+		\caption{Niepoprawnie uzupełniona plansza Futoshiki}
+		\label{fig:futoshiki_board_incorrect}
+	\end{figure}
+	\subsubsection{Skyscrapper}
+	Skyscrapper jest łamigłówką logiczną, w której wartości przypisywane zmiennym reprezentują wysokość wieżowca stawianego na danym polu. W tym problemie definiuje się dodatkowe ograniczenie, poza tym nakładanym na kolumny i wiersze. Na każdym z boków planszy, obok każdego pola tego boku, może być napisana liczba, mówiąca ile wieżowców powinno być widać w wierszu lub kolumnie, jeżeli spojrzeć na planszę z tego miejsca. Jeżeli wyższy budynek znajduje się przed niższym, to go zasłania. Przykładowa plansza jest przedstawiona na rysunku \ref{fig:skyscrapper_board}, a przykład niespełnienia ograniczenia na rysunku \ref{fig:skyscrapper_board_incorrect}.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.3\linewidth]{skyscrapper.png}
+		\caption{Przykładowa plansza do łamigłówki Skyscrapper}
+		\label{fig:skyscrapper_board}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.3\linewidth]{skyscrapper2.png}
+		\caption{Przykład niespełnienia ograniczenia w łamigłówce Skyscrapper}
+		\label{fig:skyscrapper_board_incorrect}
+	\end{figure}
+	\subsection{Proponowane rozwiązania}
+	\subsubsection{Algorytm przeszukiwania przyrostowego z powracaniem (\textit{Backtracking})}
+	Algorytm ten ma na celu ograniczyć liczbę sprawdzanych rozwiązań. Wybierana jest zmienna, a następnie jest jej przypisywana wartość z dziedziny. Jeżeli po takim przypisaniu żadne ograniczenie nie zostało złamane, to algorytm przechodzi do przypisania wartości następnej zmiennej. Jeżeli w dziedzinie aktualnie rozpatrywanej zmiennej nie istnieje wartość niełamiąca żadnego z ograniczeń, następuje powrót do poprzedniej zmiennej i próba przypisania kolejnej wartości z jej dziedziny.\\
+	Zadanie jest rozwiązanie w momencie kiedy wszystkie zmienne mają przypisane wartości i żadne ograniczenie nie jest złamane.
+	\subsubsection{Algorytm sprawdzania w przód (\textit{Forward checking})}
+	Algorytm ten postępuje podobnie do wspomnianego wcześniej. Różnica jest taka, że po każdym przypisaniu wartości do zmiennej, jeżeli ograniczenia są spełnione, to wykonywany jest dodatkowy krok. Z dziedziny wszystkich zmiennych uwikłanych w ograniczenia z aktualnie rozpatrywaną zmienną, usuwane są wartości, które powodowałyby złamanie jakiegoś ograniczenia. Jeżeli po tym procesie dziedzina którejkolwiek ze zmiennych jest pusta, to aktualnej zmiennej przypisuje się kolejną wartość z dziedziny.\\
+	W znaczący sposób ogranicza to liczbę przeglądanych rozwiązań, ale procedura usuwania wartości z dziedziny zmiennych jest dość złożona, więc nie zawsze przekłada się to na zysk czasowy. 
+	
+	\subsubsection{Heurstyki wyboru zmiennych i wartości}
+	\paragraph{Wybór zmiennej do wartościowania}\mbox{}\\
+	Do wyboru zmiennej do wartościowania została w tej pracy wybrana heurystyka \textit{najmniejszej liczby pozostałych wartości} (\textit{Minimum Remaining Values}). Jako następna zmienna do wartościowania wybierana będzie ta, której pozostało najmniej dostępnych wartości w dziedzinie. Heurystyka ta jest naturalnym uzupełnieniem algorytmu sprawdzania w przód. W przypadku algorytmu przeszukiwania przyrostowego z powrotami generuje ona spory narzut obliczeniowy, ponieważ wymaga wykonania obliczeń, których ten algorytm normalnie nie wykonuje.\\
+	Do rozwiązywania remisów (sytuacji gdy zmienne mają taką samą liczbę dostępnych wartości) zostanie użyta heurystyka wybierająca zmienną uwikłaną w najwięcej ograniczeń. Para ta będzie w dalszej części pracy nazywana w skrócie heurystyką \textit{MRV}.\\
+	Niestatyczny wybór zmiennych do wartościowania potencjalnie oferuje duży zysk, ponieważ pozwala ustawić zmienne w kolejności generującej zdecydowanie mniejsze drzewo poszukiwań.
+	\paragraph{Wybór wartości dla zmiennej}\mbox{}\\
+	Do wyboru następnej wartości dla zmiennej zostanie użyta heurystyka \textit{najmniej ograniczającej wartości}. Wybiera ona dla zmiennej taką wartość, która eliminuje najmniej dopuszczalnych wartości z dziedzin powiązanych zmiennych.\\
+	Sformułowanie celu jako znalezienia wszystkich rozwiązań problemu, sprawia że heurystyka ta nie powinna mieć wpływu na liczbę sprawdzonych rozwiązań, ponieważ i tak należy sprawdzić wszystkie dopuszczalne wartości dla każdej ze zmiennych. Rzeczą którą można w tym przypadku badać jest czas i liczba rozwiązań sprawdzonych do momentu znalezienia pierwszego rozwiązania.
+	\subsubsection{Usprawnienia wprowadzone do ograniczeń}
+	Aby zmniejszyć liczbę sprawdzanych rozwiązań i potencjalnie przyspieszyć działanie algorytmów, do sposobu rozpatrywania spełnienia ograniczeń zostały wprowadzone niewielkie zmiany, wynikające wprost z ich logiki.
+	\paragraph{Futoshiki}\mbox{}\\
+	Ograniczenie mówiące o nierówności wartości dwóch zmiennych można by rozpatrywać dopiero w momencie przypisania obu z nich. Znając jednak pełną dziedzinę zmiennych, można wyciągnąć następujące wnioski:
+	\begin{itemize}
+		\item jeżeli do "mniejszej" zmiennej została przypisana największa wartość z dziedziny, to ograniczenie nie jest spełnione,
+		\item jeżeli do "większej" zmiennej została przypisana najmniejsza wartość z dziedziny, to ograniczenie nie jest spełnione.
+	\end{itemize}
+	\paragraph{Skyscrapper}\mbox{}\\
+	Ograniczenie "widzialności" wieżowców można rozszerzyć w następujący sposób:
+	\begin{itemize}
+		\item jeżeli do pierwszej zmiennej widzianej, z którejś ze stron została przypisana największa wartość z dziedziny, a z tej strony powinno być widać więcej niż 1 wieżowiec, to ograniczenie nie jest spełnione,
+		\item jeżeli do pierwszej zmiennej widzianej, z którejś ze stron została przypisana najmniejsza wartość z dziedziny, a z tej strony powinno być widać tylko 1 wieżowiec, to ograniczenie nie jest spełnione.
+	\end{itemize}
+
+	\section{Badania}
+	\subsection{Czas działania i liczba sprawdzanych rozwiązań}
+	\subsubsection{Futoshiki}
+	\subsubsection{Skyscrapper}
+	
+	\subsection{Wpływ heurystyki wyboru zmiennej}
+	\subsection{Wpływ heurystyki wyboru wartości}
+\end{document}
