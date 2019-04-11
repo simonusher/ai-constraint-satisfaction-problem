@@ -32,20 +32,16 @@ public class SkyscrapperConstraint implements Constraint {
         Integer currentMaxFromLeft = myVariables.get(0).getValue();
         Integer currentMaxFromRight = myVariables.get(myVariables.size() - 1).getValue();
 
-        if(currentMaxFromLeft != null && currentMaxFromLeft.equals(maxHeight) && skyscrapersFromLeft > 1){
-            return false;
+        if(currentMaxFromLeft != null){
+            if((currentMaxFromLeft.equals(maxHeight) && skyscrapersFromLeft > 1) || (currentMaxFromLeft.equals(minHeight) && skyscrapersFromLeft == 1)){
+                return false;
+            }
         }
 
-        if(currentMaxFromRight != null && currentMaxFromRight.equals(maxHeight) && skyscrapersFromRight > 1){
-            return false;
-        }
-
-        if(currentMaxFromLeft != null && currentMaxFromLeft.equals(minHeight) && skyscrapersFromLeft == 1){
-            return false;
-        }
-
-        if(currentMaxFromRight != null && currentMaxFromRight.equals(minHeight) && skyscrapersFromRight == 1){
-            return false;
+        if(currentMaxFromRight != null){
+            if((currentMaxFromRight.equals(maxHeight) && skyscrapersFromRight > 1) || (currentMaxFromRight.equals(minHeight) && skyscrapersFromRight == 1)){
+                return false;
+            }
         }
 
         for (int i = 0, j = myVariables.size() - 1; i < myVariables.size(); i++, j--) {
@@ -58,12 +54,12 @@ public class SkyscrapperConstraint implements Constraint {
             Integer leftValue = leftVariable.getValue();
             Integer rightValue = rightVariable.getValue();
 
-            if(leftValue >= currentMaxFromLeft){
+            if(currentMaxFromLeft == null || leftValue >= currentMaxFromLeft){
                 nFromLeft++;
                 currentMaxFromLeft = leftValue;
             }
 
-            if(rightValue >= currentMaxFromRight){
+            if(currentMaxFromRight == null || rightValue >= currentMaxFromRight){
                 nFromRight++;
                 currentMaxFromRight = rightValue;
             }
