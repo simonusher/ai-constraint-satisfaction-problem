@@ -31,16 +31,9 @@ public class Main {
                 "test_sky_5_3.txt",
                 "test_sky_5_4.txt"
         ));
-//
-        Tester tester = new Tester(filenames, true, false);
+
+        Tester tester = new Tester(filenames, true, true);
 //        tester.runTests();
-//        tester = new Tester(filenames, true, true);
-//        tester.runTests();
-//        tester = new Tester(filenames, false, false);
-//        tester.runTests();
-//        tester = new Tester(filenames, false, true);
-//        tester.runTests();
-//
 
         filenames = new ArrayList<>(List.of(
                 "test_futo_8_0.txt",
@@ -48,21 +41,14 @@ public class Main {
                 "test_futo_8_2.txt",
                 "test_futo_9_0.txt",
                 "test_futo_9_1.txt",
-                "test_futo_9_2.txt"
-//                "test_sky_6_0.txt",
-//                "test_sky_6_1.txt",
-//                "test_sky_6_2.txt",
-//                "test_sky_6_4.txt"
-//                "test_sky_6_3.txt"
+                "test_futo_9_2.txt",
+                "test_sky_6_0.txt",
+                "test_sky_6_1.txt",
+                "test_sky_6_2.txt",
+                "test_sky_6_4.txt",
+                "test_sky_6_3.txt"
         ));
-
-//        tester = new Tester(filenames, true, false);
-//        tester.runTests();
-//        tester = new Tester(filenames, true, true);
-//        tester.runTests();
-        tester = new Tester(filenames, false, false);
+        tester = new Tester(filenames, true, true);
         tester.runTests();
-//        tester = new Tester(filenames, false, true);
-//        tester.runTests();
     }
 }

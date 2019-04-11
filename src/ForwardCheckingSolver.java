@@ -58,12 +58,12 @@ public class ForwardCheckingSolver {
                     .map(Variable::getHistoryState)
                     .collect(Collectors.toList());
 
+            if(shouldUseValueHeuristic){
+                currentVariable.sortDomain();
+            }
             while(currentVariable.hasNextValue()){
-                if(shouldUseValueHeuristic){
-                    currentVariable.pickBestValue();
-                } else {
-                    currentVariable.nextValue();
-                }
+                currentVariable.nextValue();
+
                 boolean correctlyAssigned = currentVariable.correctlyAssigned();
                 if(correctlyAssigned) {
                     boolean domainsNotEmpty = constrainedVariables.stream().allMatch(Variable::recalculateAvailableDomain);

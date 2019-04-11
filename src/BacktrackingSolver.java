@@ -42,12 +42,12 @@ public class BacktrackingSolver {
             Variable currentVariable = variables.get(currentVariableIndex);
             currentVariableIndex++;
 
+            if(shouldUseValueHeuristic){
+                currentVariable.sortDomain();
+            }
+
             while(currentVariable.hasNextValue()){
-                if(shouldUseValueHeuristic){
-                    currentVariable.pickBestValue();
-                } else {
-                    currentVariable.nextValue();
-                }
+                currentVariable.nextValue();
                 boolean correctlyAssigned = currentVariable.correctlyAssigned();
                 if(correctlyAssigned) {
                     sortVariables();

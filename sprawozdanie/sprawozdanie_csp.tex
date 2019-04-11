@@ -106,8 +106,118 @@
 	\section{Badania}
 	\subsection{Czas działania i liczba sprawdzanych rozwiązań}
 	\subsubsection{Futoshiki}
+	
+	\begin{table}[H]
+		\caption{Liczba węzłów drzewa rozwiąząń przegladanych przez algorytmy}
+		\label{tab:solutions_futo}
+		\begin{center}
+			\begin{tabular}{|l|r|r|r|r|}
+				\hline
+				& \multicolumn{1}{c|}{\textbf{BT}} & \multicolumn{1}{c|}{\textbf{FC}} & \multicolumn{1}{c|}{\textbf{BT+MRV}} & \multicolumn{1}{c|}{\textbf{FC+MRV}} \\ \hline
+				test\_futo\_4\_0 & 295                              & 125                              & 27                                   & 25                                   \\ \hline
+				test\_futo\_4\_1 & 327                              & 161                              & 35                                   & 31                                   \\ \hline
+				test\_futo\_4\_2 & 172                              & 80                               & 56                                   & 49                                   \\ \hline
+				test\_futo\_5\_0 & 1361                             & 355                              & 59                                   & 45                                   \\ \hline
+				test\_futo\_5\_1 & 4664                             & 1711                             & 87                                   & 67                                   \\ \hline
+				test\_futo\_5\_2 & 352                              & 159                              & 96                                   & 82                                   \\ \hline
+				test\_futo\_6\_0 & 21120                            & 3811                             & 166                                  & 142                                  \\ \hline
+				test\_futo\_6\_1 & 86685                            & 23489                            & 214                                  & \textbf{187}                         \\ \hline
+				test\_futo\_6\_2 & 161079                           & 56986                            & 679                                  & \textbf{532}                         \\ \hline
+				test\_futo\_7\_0 & 35648494                         & 10309677                         & 52583                                & \textbf{40525}                       \\ \hline
+				test\_futo\_7\_1 & 9367837                          & 529143                           & 33591                                & 24181                                \\ \hline
+				test\_futo\_7\_2 & 7616386                          & 2399217                          & 40573                                & 27054                                \\ \hline
+				test\_futo\_8\_0 & 3026907845                       & 1117                             & \textbf{1}                           & \textbf{1}                           \\ \hline
+				test\_futo\_8\_1 & n/a                              & 458028557                        & 820475                               & \textbf{591495}                      \\ \hline
+				test\_futo\_8\_2 & 77198485                         & 17540373                         & 16445380                             & 12106524                             \\ \hline
+				test\_futo\_9\_0 & n/a                              & 269559                           & 35787                                & 31290                                \\ \hline
+				test\_futo\_9\_1 & n/a                              & n/a                              & 6811876                              & 4977377                              \\ \hline
+				test\_futo\_9\_2 & n/a                              & n/a                              & 6541040                              & 4472736                              \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
+	
+	
+	\begin{table}[H]
+		\caption{Czasy przetwarzania poszczególnych algorytmów}
+		\label{tab:times_futo}
+		\begin{center}
+			\begin{tabular}{|l|r|r|r|r|}
+				\hline
+				& \multicolumn{1}{c|}{\textbf{BT}} & \multicolumn{1}{c|}{\textbf{FC}} & \multicolumn{1}{c|}{\textbf{BT + MRV}} & \multicolumn{1}{c|}{\textbf{FC + MRV}} \\ \hline
+				test\_futo\_4\_0 & 0,0015                           & 0,0007                           & 0,0016                                 & 0,0139                                 \\ \hline
+				test\_futo\_4\_1 & 0,0004                           & 0,0010                           & 0,0016                                 & 0,0051                                 \\ \hline
+				test\_futo\_4\_2 & 0,0002                           & 0,0004                           & 0,0020                                 & 0,0072                                 \\ \hline
+				test\_futo\_5\_0 & 0,0019                           & 0,0020                           & 0,0056                                 & 0,0135                                 \\ \hline
+				test\_futo\_5\_1 & 0,0053                           & 0,0069                           & 0,0071                                 & 0,0049                                 \\ \hline
+				test\_futo\_5\_2 & 0,0005                           & 0,0009                           & 0,0073                                 & 0,0037                                 \\ \hline
+				test\_futo\_6\_0 & 0,0313                           & 0,0201                           & 0,0227                                 & 0,0117                                 \\ \hline
+				test\_futo\_6\_1 & 0,1050                           & 0,1551                           & 0,0263                                 & 0,0067                                 \\ \hline
+				test\_futo\_6\_2 & 0,1798                           & 0,3180                           & 0,0899                                 & 0,0961                                 \\ \hline
+				test\_futo\_7\_0 & 48,5966                          & 62,1622                          & 9,9277                                 & 0,6738                                 \\ \hline
+				test\_futo\_7\_1 & 12,8833                          & 4,2271                           & 6,7674                                 & 0,3085                                 \\ \hline
+				test\_futo\_7\_2 & 10,3744                          & 17,0219                          & 8,6324                                 & 0,2909                                 \\ \hline
+				test\_futo\_8\_0 & 4491,2230                        & 0,1625                           & 0,0010                                 & 0,0002                                 \\ \hline
+				test\_futo\_8\_1 & n/a                              & 2813,9495                        & 254,7720                               & 7,7844                                 \\ \hline
+				test\_futo\_8\_2 & 116,0373                         & 148,2639                         & 4830,8584                              & 154,3986                               \\ \hline
+				test\_futo\_9\_0 & n/a                              & 2,1556                           & 10,8396                                & 0,3307                                 \\ \hline
+				test\_futo\_9\_1 & n/a                              & n/a                              & 2657,8022                              & 63,5044                                \\ \hline
+				test\_futo\_9\_2 & n/a                              & n/a                              & 2677,7288                              & 64,6978                                \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
+	
 	\subsubsection{Skyscrapper}
 	
-	\subsection{Wpływ heurystyki wyboru zmiennej}
+	\begin{table}[H]
+		\caption{Liczba węzłów drzewa rozwiąząń przegladanych przez algorytmy}
+		\label{tab:skyscrapper_solutions}
+		\begin{center}
+			\begin{tabular}{|l|r|r|r|r|}
+				\hline
+				& \multicolumn{1}{c|}{\textbf{BT}} & \multicolumn{1}{c|}{\textbf{FC}} & \multicolumn{1}{c|}{\textbf{BT + MRV}} & \multicolumn{1}{c|}{\textbf{FC + MRV}} \\ \hline
+				test\_sky\_4\_0 & 215                              & 115                              & 110                                    & 81                                     \\ \hline
+				test\_sky\_4\_1 & 161                              & 77                               & 74                                     & 58                                     \\ \hline
+				test\_sky\_4\_2 & 304                              & 139                              & 193                                    & 164                                    \\ \hline
+				test\_sky\_4\_3 & 1270                             & 614                              & 393                                    & 311                                    \\ \hline
+				test\_sky\_4\_4 & 137                              & 76                               & 82                                     & 68                                     \\ \hline
+				test\_sky\_5\_0 & 93272                            & 28099                            & 9476                                   & 6227                                   \\ \hline
+				test\_sky\_5\_1 & 58713                            & 14751                            & \textbf{1816}                          & \textbf{1168}                          \\ \hline
+				test\_sky\_5\_2 & 15713                            & 6139                             & 9867                                   & 7053                                   \\ \hline
+				test\_sky\_5\_3 & 48598                            & 17191                            & 6393                                   & 4455                                   \\ \hline
+				test\_sky\_5\_4 & 7193                             & 2538                             & 1069                                   & 705                                    \\ \hline
+				test\_sky\_6\_0 & 126773                           & 55630                            & 199669                                 & 145408                                 \\ \hline
+				test\_sky\_6\_1 & 375146                           & 139577                           & 133312                                 & 98099                                  \\ \hline
+				test\_sky\_6\_2 & 14703689                         & 3389857                          & \textbf{538231}                        & \textbf{402902}                        \\ \hline
+				test\_sky\_6\_3 & 64137671                         & 26275623                         & 6758373                                & 4955527                                \\ \hline
+				test\_sky\_6\_4 & 336873                           & 159064                           & 68576                                  & 49537                                  \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
+
+	\begin{table}[H]
+		\caption{Czasy przetwarzania poszczególnych algorytmów dla różnych instancji problemu Skyscrapper}
+		\label{tab:skyscrapper_times}
+		\begin{center}
+			\begin{tabular}{|l|r|r|r|r|}
+				\hline
+				& \multicolumn{1}{c|}{\textbf{BT}} & \multicolumn{1}{c|}{\textbf{FC}} & \multicolumn{1}{l|}{\textbf{BT + MRV}} & \multicolumn{1}{l|}{\textbf{FC + MRV}} \\ \hline
+				test\_sky\_4\_0 & 0,0002                           & 0,0005                           & 0,0026                                 & 0,0024                                 \\ \hline
+				test\_sky\_4\_1 & 0,0001                           & 0,0004                           & 0,0020                                 & 0,0009                                 \\ \hline
+				test\_sky\_4\_2 & 0,0002                           & 0,0006                           & 0,0042                                 & 0,0015                                 \\ \hline
+				test\_sky\_4\_3 & 0,0009                           & 0,0024                           & 0,0084                                 & 0,0026                                 \\ \hline
+				test\_sky\_4\_4 & 0,0001                           & 0,0004                           & 0,0025                                 & 0,0006                                 \\ \hline
+				test\_sky\_5\_0 & 0,0845                           & 0,1205                           & 0,4130                                 & 0,0492                                 \\ \hline
+				test\_sky\_5\_1 & 0,0533                           & 0,0569                           & 0,0791                                 & 0,0087                                 \\ \hline
+				test\_sky\_5\_2 & 0,0142                           & 0,0288                           & 0,4208                                 & 0,0523                                 \\ \hline
+				test\_sky\_5\_3 & 0,0464                           & 0,0749                           & 0,2787                                 & 0,0338                                 \\ \hline
+				test\_sky\_5\_4 & 0,0070                           & 0,0113                           & 0,0513                                 & 0,0058                                 \\ \hline
+				test\_sky\_6\_0 & 0,1405                           & 0,7224                           & 13,7718                                & 0,9643                                 \\ \hline
+				test\_sky\_6\_1 & 0,3634                           & 1,0723                           & 8,7668                                 & 0,6316                                 \\ \hline
+				test\_sky\_6\_2 & 14,4541                          & 16,2330                          & 34,8568                                & 2,5252                                 \\ \hline
+				test\_sky\_6\_3 & 66,6152                          & 136,4960                         & 436,4031                               & 32,3194                                \\ \hline
+				test\_sky\_6\_4 & 0,3229                           & 0,8969                           & 5,5211                                 & 0,3557                                 \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
 	\subsection{Wpływ heurystyki wyboru wartości}
 \end{document}

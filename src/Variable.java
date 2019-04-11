@@ -67,6 +67,18 @@ public class Variable {
         }
     }
 
+    public void sortDomain(){
+        List<Variable> constrainedVariables = this.getVariablesToChange();
+        Map<Integer, Integer> possibleValuesMap = new HashMap<>(availableDomain.size());
+        for (Integer possibleValue : availableDomain) {
+            setValue(possibleValue);
+            int numberOfPossibleValues = constrainedVariables.stream()
+                    .mapToInt(Variable::getNumberOfCurrentlyPossibleValues).sum();
+            possibleValuesMap.put(possibleValue, numberOfPossibleValues);
+        }
+        availableDomain.sort((firstPossibleValue, secondPossibleValue) -> possibleValuesMap.get(secondPossibleValue) - possibleValuesMap.get(firstPossibleValue));
+    }
+
     public boolean pickBestValue(){
         if(availableDomain.isEmpty()){
             return false;
