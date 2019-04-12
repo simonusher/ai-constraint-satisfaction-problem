@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6930 64-bit) (preloaded format=pdflatex 2019.1.25)  12 APR 2019 03:42
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6930 64-bit) (preloaded format=pdflatex 2019.1.25)  12 APR 2019 12:03
 entering extended mode
 **./sprawozdanie_csp.tex
 (sprawozdanie_csp.tex
@@ -458,7 +458,7 @@ ia ogra-ni-cze« zo-sta-ªy wpro-
  []
 
 [4] [5]
-Overfull \hbox (8.19125pt too wide) in paragraph at lines 154--176
+Overfull \hbox (3.08017pt too wide) in paragraph at lines 154--176
  [] 
  []
 
@@ -487,7 +487,7 @@ l.238
                                                   \fi \fi 
 l.238 
       ]
-Overfull \hbox (13.80435pt too wide) in paragraph at lines 270--286
+Overfull \hbox (3.58218pt too wide) in paragraph at lines 270--286
  [] 
  []
 
@@ -498,7 +498,7 @@ as been already used, duplicate ignored
                                                   \fi \fi 
 l.288 
       ]
-Overfull \hbox (10.80432pt too wide) in paragraph at lines 309--318
+Overfull \hbox (0.58215pt too wide) in paragraph at lines 309--318
  [] 
  []
 
@@ -581,7 +581,7 @@ Local/Programs/MiKTeX 2.9/fonts/type1/public/pl/plr5.pfb><C:/Users/Szymon/AppDa
 ta/Local/Programs/MiKTeX 2.9/fonts/type1/public/pl/plr7.pfb><C:/Users/Szymon/Ap
 pData/Local/Programs/MiKTeX 2.9/fonts/type1/public/pl/plsy10.pfb><C:/Users/Szym
 on/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/pl/plti10.pfb>
-Output written on sprawozdanie_csp.pdf (13 pages, 559859 bytes).
+Output written on sprawozdanie_csp.pdf (13 pages, 560048 bytes).
 PDF statistics:
  244 PDF objects out of 1000 (max. 8388607)
  54 named destinations out of 1000 (max. 500000)
