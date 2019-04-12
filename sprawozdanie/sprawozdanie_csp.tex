@@ -80,7 +80,7 @@
 	Algorytm ten postępuje podobnie do wspomnianego wcześniej. Różnica jest taka, że po każdym przypisaniu wartości do zmiennej, jeżeli ograniczenia są spełnione, to wykonywany jest dodatkowy krok. Z dziedziny wszystkich zmiennych uwikłanych w ograniczenia z aktualnie rozpatrywaną zmienną, usuwane są wartości, które powodowałyby złamanie jakiegoś ograniczenia. Jeżeli po tym procesie dziedzina którejkolwiek ze zmiennych jest pusta, to aktualnej zmiennej przypisuje się kolejną wartość z dziedziny.\\
 	W znaczący sposób ogranicza to liczbę przeglądanych rozwiązań, ale procedura usuwania wartości z dziedziny zmiennych jest dość złożona, więc nie zawsze przekłada się to na zysk czasowy. 
 	
-	\subsubsection{Heurstyki wyboru zmiennych i wartości}
+	\subsubsection{Heurstyki wyboru zmiennych i wartości}\label{sub:heuristics}
 	\paragraph{Wybór zmiennej do wartościowania}\mbox{}\\
 	Do wyboru zmiennej do wartościowania została w tej pracy wybrana heurystyka \textit{najmniejszej liczby pozostałych wartości} (\textit{Minimum Remaining Values}). Jako następna zmienna do wartościowania wybierana będzie ta, której pozostało najmniej dostępnych wartości w dziedzinie. Heurystyka ta jest naturalnym uzupełnieniem algorytmu sprawdzania w przód. W przypadku algorytmu przeszukiwania przyrostowego z powrotami generuje ona spory narzut obliczeniowy, ponieważ wymaga wykonania obliczeń, których ten algorytm normalnie nie wykonuje.\\
 	Do rozwiązywania remisów (sytuacji gdy zmienne mają taką samą liczbę dostępnych wartości) zostanie użyta heurystyka wybierająca zmienną uwikłaną w najwięcej ograniczeń. Para ta będzie w dalszej części pracy nazywana w skrócie heurystyką \textit{MRV}.\\
@@ -104,11 +104,19 @@
 	\end{itemize}
 
 	\section{Badania}
-	\subsection{Czas działania i liczba sprawdzanych rozwiązań}
+	W sekcji badań wykorzystywane będą następujące oznaczenia:
+	\begin{itemize}
+		\item BT - algorytm przeszukiwania przyrostowego z powrotami (\textit{Backtracking}),
+		\item FC - algorytm sprawdzania w przód (\textit{Forward checking}),
+		\item MRV - wspomniana w sekcji \ref{sub:heuristics} heurystyka wyboru zmiennej do wartościowania
+		\item VH - wspomniana w sekcji \ref{sub:heuristics} heurystyka wyboru wartości dla zmiennej
+		\item BTM, FCM - odpowiednio algorytm BT i FC z zastosowaną heurystyką MRV
+	\end{itemize}
+	\subsection{Czas działania i liczba węzłów drzewa rozwiązań}
 	\subsubsection{Futoshiki}
 	
 	\begin{table}[H]
-		\caption{Liczba węzłów drzewa rozwiąząń przegladanych przez algorytmy}
+		\caption{Liczba węzłów drzewa rozwiąząń przegladanych przez algorytmy dla różnych instancji problemu Futoshiki}
 		\label{tab:solutions_futo}
 		\begin{center}
 			\begin{tabular}{|l|r|r|r|r|}
@@ -136,14 +144,16 @@
 		\end{center}
 	\end{table}
 	
+	W tabeli \ref{tab:solutions_futo} przedstawione zostały liczby węzłów drzewa rozwiązań, odwiedzanych przez poszczególne algorytmy, dla różnych instancji problemu Futoshiki. Każdy z opisywanych algorytmów został tam przedstawiony w 2 wersjach. Jedna z nich korzystała z heurystyki MRV do wyboru zmiennej do wartościowania, a druga nie. 
+	Pierwsza rzecz, która rzuca się w oczy, to dużo mniejsza liczba przeglądanych przez algorytm FC w stosunku do algorytmu BT. Bardzo ważne jest, aby zauważyć, jak dużą różnicę w liczbie przeglądanych węzłów wprowadza zastosowanie heurystyki MRV. W tabeli pogrubione zostały te miejsca, dla których zysk był największy. Najlepiej widać to najprawdopodobniej na przykładzie pliku test\_futo\_8\_0, gdzie zastosowanie tej heurystyki pozwoliło już w pierwszym kroku stwierdzić, że ten problem nie posiada rozwiązania. Drugim ciekawy przypadek widać dla pliku test\_futo\_8\_1, gdzie zysk był ponad 700-krotny.
 	
 	\begin{table}[H]
-		\caption{Czasy przetwarzania poszczególnych algorytmów}
+		\caption{Czasy przetwarzania poszczególnych algorytmów dla różnych instancji problemu Futoshiki}
 		\label{tab:times_futo}
 		\begin{center}
 			\begin{tabular}{|l|r|r|r|r|}
 				\hline
-				& \multicolumn{1}{c|}{\textbf{BT}} & \multicolumn{1}{c|}{\textbf{FC}} & \multicolumn{1}{c|}{\textbf{BT + MRV}} & \multicolumn{1}{c|}{\textbf{FC + MRV}} \\ \hline
+				& \multicolumn{1}{c|}{\textbf{BT (s)}} & \multicolumn{1}{c|}{\textbf{FC (s)}} & \multicolumn{1}{c|}{\textbf{BT + MRV (s)}} & \multicolumn{1}{c|}{\textbf{FC + MRV (s)}} \\ \hline
 				test\_futo\_4\_0 & 0,0015                           & 0,0007                           & 0,0016                                 & 0,0139                                 \\ \hline
 				test\_futo\_4\_1 & 0,0004                           & 0,0010                           & 0,0016                                 & 0,0051                                 \\ \hline
 				test\_futo\_4\_2 & 0,0002                           & 0,0004                           & 0,0020                                 & 0,0072                                 \\ \hline
@@ -165,11 +175,14 @@
 			\end{tabular}
 		\end{center}
 	\end{table}
+
+	W tabeli \ref{tab:times_futo} przedstawione zostały czasy przetwarzania dla różnych algorytmów na różnych instancjach problemu Futoshiki. Można tam zauważyć m.in. to, że gdy po zastosowaniu heurystyki MRV, udało się rozwiązać duże instancje problemów, które nie były możliwe do rozwiązania bez tego. Heurystyka ta bardzo dobrze komponuje się w działanie algorytmu FC. Dzięki temu narzut obliczeniowy nie jest tam aż tak duży i dla większych instancji problemów pozwala to znacznie przyspieszyć ich rozwiązywanie metodą sprawdzania w przód.\\
+	Jeżeli chodzi o algorytm BT, to widać, że o ile zastosowanie w nim tej heurystyki czasami daje sensowne rezultaty, o tyle narzut obliczeniowy jest ogromny. Co za tym idzie, użycie jej na dużych instancjach problemów, potrafi znacząco spowolnić jego działanie.
 	
 	\subsubsection{Skyscrapper}
 	
 	\begin{table}[H]
-		\caption{Liczba węzłów drzewa rozwiąząń przegladanych przez algorytmy}
+		\caption{Liczba węzłów drzewa rozwiąząń przeglądanych przez algorytmy}
 		\label{tab:skyscrapper_solutions}
 		\begin{center}
 			\begin{tabular}{|l|r|r|r|r|}
@@ -200,7 +213,7 @@
 		\begin{center}
 			\begin{tabular}{|l|r|r|r|r|}
 				\hline
-				& \multicolumn{1}{c|}{\textbf{BT}} & \multicolumn{1}{c|}{\textbf{FC}} & \multicolumn{1}{l|}{\textbf{BT + MRV}} & \multicolumn{1}{l|}{\textbf{FC + MRV}} \\ \hline
+				& \multicolumn{1}{c|}{\textbf{BT (s)}} & \multicolumn{1}{c|}{\textbf{FC (s)}} & \multicolumn{1}{l|}{\textbf{BT + MRV (s)}} & \multicolumn{1}{l|}{\textbf{FC + MRV (s)}} \\ \hline
 				test\_sky\_4\_0 & 0,0002                           & 0,0005                           & 0,0026                                 & 0,0024                                 \\ \hline
 				test\_sky\_4\_1 & 0,0001                           & 0,0004                           & 0,0020                                 & 0,0009                                 \\ \hline
 				test\_sky\_4\_2 & 0,0002                           & 0,0006                           & 0,0042                                 & 0,0015                                 \\ \hline
@@ -219,5 +232,111 @@
 			\end{tabular}
 		\end{center}
 	\end{table}
+
+	W tabelach \ref{tab:skyscrapper_solutions} i \ref{tab:skyscrapper_times} przedstawione zostały wyniki badań szybkości działania algorytmów dla instancji problemów Skyscrapper.
+	Wnioski, które można z nich wyciągnąć w zasadzie nie różnią się od tych dla problemu Futoshiki. Algorytm FC przegląda zdecydowanie mniej węzłów drzewa rozwiązań. Zastosowanie heurystyki MRV, dla obu algorytmów daje znaczne obniżenie liczby odwiedzanych węzłów. Zastosowanie jej razem z algorytmem FC daje bardzo dobre zyski czasowe, ale już przy algorytmie BT, przez dodatkowe obliczenia, nie jest dobrym rozwiązaniem.
+
 	\subsection{Wpływ heurystyki wyboru wartości}
+	W tej sekcji przedstawione zostały wyniki badań wpływu zastosowania heurystyki wyboru wartości na szybkość znajdowania pierwszego rozwiązania, wyrażoną w liczbie odwiedzonych węzłów i czasie potrzebnym na jego znalezienie.\\
+	Badania zostały przeprowadzone pod takim kątem, ponieważ tak jak wspomniano już wcześniej, przy zdefiniowaniu celu problemu jako znalezienia wszystkich istniejących rozwiązań, kolejność wyboru wartości nie ma żadnego wpływu na liczbę odwiedzanych przez algorytmy węzłów. Dzieje się tak, ponieważ aby znaleźć wszystkie rozwiązania, i tak należy przejrzeć wszystkie dopuszczalne w danym węźle wartości.
+
+	\begin{table}[H]
+		\caption{Liczba węzłów drzewa rozwiąząń przegladanych przez algorytmy do znalezienia pierwszego rozwiązania dla problemów Futoshiki}
+		\label{tab:vh_mrv}
+		\begin{center}
+			\begin{tabular}{|l|r|r|r|r|}
+				\hline
+				& \multicolumn{1}{c|}{\textbf{BTM}} & \multicolumn{1}{l|}{\textbf{BTM + VH}} & \multicolumn{1}{c|}{\textbf{FCM}} & \multicolumn{1}{c|}{\textbf{FCM+ VH}} \\ \hline
+				test\_futo\_4\_0 & 16                                     & 16                                          & 16                                     & 16                                          \\ \hline
+				test\_futo\_4\_1 & 21                                     & \textbf{17}                                 & 19                                     & \textbf{17}                                 \\ \hline
+				test\_futo\_4\_2 & 46                                     & 46                                          & 41                                     & 41                                          \\ \hline
+				test\_futo\_5\_0 & 59                                     & \textbf{57}                                 & \textbf{45}                            & 46                                          \\ \hline
+				test\_futo\_5\_1 & 78                                     & 78                                          & 63                                     & 63                                          \\ \hline
+				test\_futo\_5\_2 & \textbf{29}                            & 45                                          & \textbf{27}                            & 42                                          \\ \hline
+				test\_futo\_6\_0 & 160                                    & \textbf{67}                                 & 137                                    & \textbf{61}                                 \\ \hline
+				test\_futo\_6\_1 & 138                                    & \textbf{132}                                & 121                                    & \textbf{116}                                \\ \hline
+				test\_futo\_6\_2 & \textbf{149}                           & 317                                         & \textbf{124}                           & 260                                         \\ \hline
+				test\_futo\_7\_0 & 23030                                  & \textbf{20638}                              & 18024                                  & \textbf{16180}                              \\ \hline
+				test\_futo\_7\_1 & \textbf{21437}                         & 30681                                       & \textbf{15621}                         & 21186                                       \\ \hline
+				test\_futo\_7\_2 & 32752                                  & \textbf{30553}                              & 21744                                  & \textbf{21335}                              \\ \hline
+			\end{tabular}
+		\end{center}
+	\end{table}
+
+\begin{table}[H]
+	\caption{Czas przetwarzania do znalezienia pierwszego rozwiązania dla problemów Futoshiki}
+	\label{tab:vh_no_mrv}
+	\begin{center}
+		\begin{tabular}{|l|r|r|r|r|}
+			\hline
+			& \multicolumn{1}{c|}{\textbf{BTM (s)}} & \multicolumn{1}{l|}{\textbf{BTM + VH (s)}} & \multicolumn{1}{c|}{\textbf{FCM (s)}} & \multicolumn{1}{c|}{\textbf{FCM + VH (s)}} \\ \hline
+			test\_futo\_4\_0 & 0,0011                            & 0,0012                                 & 0,0101                            & 0,0134                                 \\ \hline
+			test\_futo\_4\_1 & 0,0009                            & 0,0009                                 & 0,0028                            & 0,0032                                 \\ \hline
+			test\_futo\_4\_2 & 0,0017                            & 0,0020                                 & 0,0065                            & 0,0057                                 \\ \hline
+			test\_futo\_5\_0 & 0,0055                            & 0,0068                                 & 0,0134                            & 0,0085                                 \\ \hline
+			test\_futo\_5\_1 & 0,0062                            & 0,0087                                 & 0,0045                            & 0,0051                                 \\ \hline
+			test\_futo\_5\_2 & 0,0019                            & 0,0043                                 & 0,0009                            & 0,0081                                 \\ \hline
+			test\_futo\_6\_0 & 0,0218                            & 0,0110                                 & 0,0114                            & 0,0037                                 \\ \hline
+			test\_futo\_6\_1 & 0,0172                            & 0,0196                                 & 0,0048                            & 0,0064                                 \\ \hline
+			test\_futo\_6\_2 & 0,0134                            & 0,0528                                 & 0,0255                            & 0,0375                                 \\ \hline
+			test\_futo\_7\_0 & 4,2814                            & 5,6408                                 & 0,3443                            & 0,4907                                 \\ \hline
+			test\_futo\_7\_1 & 4,1773                            & 9,4359                                 & 0,1930                            & 0,4368                                 \\ \hline
+			test\_futo\_7\_2 & 6,8676                            & 9,9061                                 & 0,2321                            & 0,4498                                 \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\begin{table}[H]
+	\caption{Liczba węzłów drzewa rozwiąząń przegladanych przez algorytmy do znalezienia pierwszego rozwiązania dla problemów Skyscrapper}
+	\label{tab:vh_sky_number}
+	\begin{center}
+		\begin{tabular}{|l|r|r|r|r|}
+			\hline
+			& \multicolumn{1}{c|}{\textbf{BTM}} & \multicolumn{1}{c|}{\textbf{BTM + VH}} & \multicolumn{1}{c|}{\textbf{FCM}} & \multicolumn{1}{c|}{\textbf{FCM + VH}} \\ \hline
+			test\_sky\_6\_0 & \textbf{126192}                   & 131629                                 & \textbf{90921}                    & 95082                                  \\ \hline
+			test\_sky\_6\_1 & 58130                             & \textbf{50396}                         & 43637                             & \textbf{37344}                         \\ \hline
+			test\_sky\_6\_2 & \textbf{202190}                   & 211993                                 & \textbf{151972}                   & 160707                                 \\ \hline
+			test\_sky\_6\_3 & \textbf{6279151}                  & 6329223                                & 4606340                           & \textbf{4601170}                       \\ \hline
+			test\_sky\_6\_4 & \textbf{52059}                    & 54246                                  & \textbf{37588}                    & 38667                                  \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\begin{table}[H]
+	\caption{Czasy przetwarzania do znalezienia pierwszego rozwiązania dla problemów Skyscrapper}
+	\label{tab:vh_sky_times}
+	\begin{center}
+		\begin{tabular}{|l|r|r|r|r|}
+			\hline
+			& \multicolumn{1}{c|}{\textbf{BTM (s)}} & \multicolumn{1}{c|}{\textbf{BTM + VH (s)}} & \multicolumn{1}{c|}{\textbf{FCM (s)}} & \multicolumn{1}{c|}{\textbf{FCM + VH (s)}} \\ \hline
+			test\_sky\_6\_0 & 8,7182                           & 12,4947                             & 0,6015                       & 1,3103                             \\ \hline
+			test\_sky\_6\_1 & 3,8109                        & 4,9899                              & 0,2768                       & 0,4737                             \\ \hline
+			test\_sky\_6\_2 & 12,7111                        & 18,6572                              & 0,9401                        & 1,9689                             \\ \hline
+			test\_sky\_6\_3 & 405,1843                        & 806,1923                               & 30,0207                        & 59,8440                              \\ \hline
+			test\_sky\_6\_4 & 4,1970                        & 6,1803                              & 0,2709                       & 0,5504                            \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+Jak widać we wszystkich tabelach przedstawionych powyżej, skutki zastosowania heurystyki wyboru wartości dla zmiennej nie są tak proste do przewidzenia jak tej odpowiedzialnej za wybór zmiennej. W wynikach widać, że zastosowanie heurystyki potrafi poprawić szybkość znajdowania pierwszego rozwiązania, jak i ją pogorszyć. Zdaje się to być cecha poszczególnych instancji problemu, bardziej niż samej heurystyki.
+
+\section{Profilowanie kodu}
+Aby wyszukać potencjalne problemy w implementacji i usprawnić działanie programu, przeprowadzone zostało profilowanie kodu pod kątem użycia czasu procesora przez poszczególne fragmenty programu.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{bt_futo_mrv.png}
+	\caption{Okno profilera przy uruchomionym algorytmie BT z heurystyką MRV}
+	\label{fig:bt_mrv_profiling}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\linewidth]{fc_futo.png}
+	\caption{Okno profilera przy uruchomionym algorytmie FC}
+	\label{fig:fc_futo_profiling}
+\end{figure}
+
+Z przeprowadzonej analizy wynikło, że najczęściej używanym fragmentem kodu, niezależnie od uruchamianego algorytmu jest metoda UnequalityConstraint.isSatisfied(), więc tam właśnie został położony nacisk na optymalizację.
+
+\section{Wnioski}
+Problemy spełniania ograniczeń, przez swoją bardzo szybko rosnącą przestrzeń rozwiązań stanowią spore wyzwanie obliczeniowe. Algorytmy przeszukiwania przyrostowego z powracaniem i sprawdzania w przód, oferują efektywny sposób przeszukiwania tej przestrzeni dla dowolnego problemu sforumułowanego w terminach zmiennych i ograniczeń. Podsumowując, oba zbadane algorytmy wraz z przebadanymi heurystykami, stanowią bardzo dobre, ogólne narzędzia do rozwiązywania złożonych problemów spełniania ograniczeń. Końcowo jednak ze wszystkich zbadanych kombinacji, algorytm sprawdzania w przód z dodatkowym zastosowaniem heurystyki do wyboru zmiennej, wydaje się być najlepszym rozwiązaniem do dużych instancji tego typu problemów. 
 \end{document}

@@ -36,12 +36,12 @@ public class Main {
 //        tester.runTests();
 
         filenames = new ArrayList<>(List.of(
-                "test_futo_8_0.txt",
-                "test_futo_8_1.txt",
-                "test_futo_8_2.txt",
-                "test_futo_9_0.txt",
-                "test_futo_9_1.txt",
-                "test_futo_9_2.txt",
+//                "test_futo_8_0.txt",
+//                "test_futo_8_1.txt",
+//                "test_futo_8_2.txt",
+//                "test_futo_9_0.txt",
+//                "test_futo_9_1.txt",
+//                "test_futo_9_2.txt",
                 "test_sky_6_0.txt",
                 "test_sky_6_1.txt",
                 "test_sky_6_2.txt",
