@@ -3,7 +3,11 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        test();
+//        test();
+        Problem sudokuProblem = new SudokuProblem("results/sudoku/");
+        sudokuProblem.load("test_sudoku_0_0.txt");
+        ForwardCheckingSolver solver = new ForwardCheckingSolver(sudokuProblem, true, false);
+        solver.solve();
     }
 
     public static void test() {
@@ -33,7 +37,7 @@ public class Main {
         ));
 
         Tester tester = new Tester(filenames, true, true);
-//        tester.runTests();
+        tester.runTests();
 
         filenames = new ArrayList<>(List.of(
 //                "test_futo_8_0.txt",
